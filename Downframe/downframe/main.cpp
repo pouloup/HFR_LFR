@@ -2,9 +2,12 @@
  * Authors: Anthony ARCH - Pierre-Henri DAUVERGNE - Jérémy VIGOUR (ESIR)
 **/
 
+#include <ctime>
+
 #include "HFR2LFRBlurConverter.h"
 #include "HFR2LFRFusionConverter.h"
 #include "HFR2LFRFlowDrawer.h"
+#include "HFR2LFRDecimationConverter.h"
 
 using namespace cv;
 using namespace std;
@@ -32,6 +35,7 @@ int main(int argc, char **argv)
 		cout << "Quelle video ?" << endl;
 		cout << "1. Chevaux" << endl;
 		cout << "2. Composition" << endl;
+		cout << "3. Séquence Florent" << endl;
 		cout << "Choix : ";
 		cin >> video;
 	}
@@ -46,10 +50,15 @@ int main(int argc, char **argv)
 		HFRVideoPath = "../../data/composition_1920x1080_UYVY_120fps.avi";
 		LFRVideoPath << "../../data/composition_1920x1080_UYVY_60fps_simul";
 	}
+	else if (video == 3)
+	{
+		HFRVideoPath = "../../data/sequence_florent_1920x1080_UYVY_120fps.avi";
+		LFRVideoPath << "../../data/sequence_florent_1920x1080_UYVY_60fps_simul";
+	}
 
 	while(nbFrames < 0)
 	{
-		cout << "Nombre de frames LFR a generer ?" << endl << "(0 = toutes) : ";
+		cout << "Nombre de frames LFR a genesrer ?" << endl << "(0 = toutes) : ";
 		cin >> nbFrames;
 	}
 
@@ -65,6 +74,7 @@ int main(int argc, char **argv)
 		cout << "1. Fusion d'images" << endl;
 		cout << "2. Flou cinetique" << endl;
 		cout << "3. Afficher seulement le flot optique" << endl;
+		cout << "4. Simple decimation" << endl;
 		cout << "Choix : ";
 		cin >> method;
 	}
@@ -86,6 +96,11 @@ int main(int argc, char **argv)
 	{
 		LFRVideoPath << "flow.avi";
 		converter = new HFR2LFRFlowDrawer(HFRVideoPath, LFRVideoPath.str());
+	}
+	else if(method == 4)
+	{
+		LFRVideoPath << "sequence.avi";
+		converter = new HFR2LFRDecimationConverter(HFRVideoPath, LFRVideoPath.str());
 	}
 
 	converter->initialize();
