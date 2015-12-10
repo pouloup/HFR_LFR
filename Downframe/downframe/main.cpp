@@ -35,15 +35,16 @@ int main(int argc, char **argv)
 		cout << "Quelle video ?" << endl;
 		cout << "1. Chevaux" << endl;
 		cout << "2. Composition" << endl;
-		cout << "3. Séquence Florent" << endl;
+		cout << "3. Sequence Florent" << endl;
 		cout << "Choix : ";
 		cin >> video;
 	}
 
 	if(video == 1)
 	{
-		HFRVideoPath = "../../data/chevaux_1920x1080_UYVY_120fps.avi";
-		LFRVideoPath << "../../data/chevaux_1920x1080_UYVY_60fps_simul";
+		//HFRVideoPath = "../../data/chevaux_1920x1080_UYVY_120fps.avi";
+		HFRVideoPath = "X:BCOM/Contenu_120/Chevaux/Chevaux-90_1920x1080_60Hz_UYVY_8bits.avi";
+		LFRVideoPath << "X:BCOM/Rendu/chevaux_1920x1080_UYVY_60fps_simul";
 	}
 	else if (video == 2)
 	{
@@ -68,7 +69,7 @@ int main(int argc, char **argv)
 		cin >> startFrame;
 	}
 
-	while(method < 1 || method > 3)
+	while(method < 1 || method > 4)
 	{
 		cout << "Quelle methode ?" << endl;
 		cout << "1. Fusion d'images" << endl;
