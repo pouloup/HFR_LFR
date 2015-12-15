@@ -43,8 +43,8 @@ int main(int argc, char **argv)
 	if(video == 1)
 	{
 		//HFRVideoPath = "../../data/chevaux_1920x1080_UYVY_120fps.avi";
-		HFRVideoPath = "X:BCOM/Contenu_120/Chevaux/Chevaux-90_1920x1080_60Hz_UYVY_8bits.avi";
-		LFRVideoPath << "X:BCOM/Rendu/chevaux_1920x1080_UYVY_60fps_simul";
+		HFRVideoPath = "X:/BCOM/Chevaux-90_1920x1080_120Hz_I420_8bits.avi";
+		LFRVideoPath << "X:/BCOM/Chevaux-90_1920x1080_60Hz_I420_8bits_simul";
 	}
 	else if (video == 2)
 	{
@@ -100,7 +100,7 @@ int main(int argc, char **argv)
 	}
 	else if(method == 4)
 	{
-		LFRVideoPath << "sequence.avi";
+		LFRVideoPath << "decimation.avi";
 		converter = new HFR2LFRDecimationConverter(HFRVideoPath, LFRVideoPath.str());
 	}
 
