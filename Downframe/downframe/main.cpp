@@ -75,7 +75,7 @@ int main(int argc, char **argv)
 		cout << "1. Fusion d'images" << endl;
 		cout << "2. Flou cinetique" << endl;
 		cout << "3. Afficher seulement le flot optique" << endl;
-		cout << "4. Simple decimation" << endl;
+		cout << "4. Simple decimation 1/2 frame." << endl;
 		cout << "Choix : ";
 		cin >> method;
 	}
@@ -100,7 +100,7 @@ int main(int argc, char **argv)
 	}
 	else if(method == 4)
 	{
-		LFRVideoPath << "decimation.avi";
+		LFRVideoPath << "decimation1_2.avi";
 		converter = new HFR2LFRDecimationConverter(HFRVideoPath, LFRVideoPath.str());
 	}
 
