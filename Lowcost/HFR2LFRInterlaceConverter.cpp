@@ -8,7 +8,7 @@
 
 #include "HFR2LFRInterlaceConverter.h"
 
-HFR2LFRInterlaceConverter::HFR2LFRInterlaceConverter(const string HFRVideoPath, const string LFRVideoPath)
+HFR2LFRInterlaceConverter::HFR2LFRInterlaceConverter(const string & HFRVideoPath, const string & LFRVideoPath)
 	: HFR2LFRConverter(HFRVideoPath, LFRVideoPath)
 {
 }

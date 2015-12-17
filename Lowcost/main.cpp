@@ -7,12 +7,19 @@
  **************************************************************************/
 
 #include <iostream>
+#include "HFR2LFRTemporalSobel.h"
+using namespace std;
 
 int main( int argc, char* argv[] )
 {
-    
-    std::cout << "Hello w." << std::endl;
+    if (argc <= 2) return 2; // TODO: usage
+    string HFRVideoPath = argv[1];
+    string LFRVideoPath = argv[2];
 
+    HFR2LFRConverter * converter = new HFR2LFRTemporalSobel(HFRVideoPath, LFRVideoPath);
+    converter->initialize();
+    converter->convert(24);
+    
     return 0;
 }
 
