@@ -18,7 +18,7 @@ int main( int argc, char* argv[] )
 
     HFR2LFRConverter * converter = new HFR2LFRTemporalSobel(HFRVideoPath, LFRVideoPath);
     converter->initialize();
-    converter->convert(24);
+    converter->convert(120, 24);
     
     return 0;
 }
