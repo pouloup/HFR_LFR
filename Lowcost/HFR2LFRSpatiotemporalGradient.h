@@ -6,15 +6,16 @@
  *
  **************************************************************************/
 
-#ifndef __HFR2LFRTEMPORALSOBEL_H__
-#define __HFR2LFRTEMPORALSOBEL_H__
+#ifndef __HFR2LFRSPATIOTEMPORALGRADIENT_H__
+#define __HFR2LFRSPATIOTEMPORALGRADIENT_H__
+
 #include "HFR2LFRConverter.h"
 
-class HFR2LFRTemporalSobel: public HFR2LFRConverter
+class HFR2LFRSpatiotemporalGradient: public HFR2LFRConverter
 {
 public:
-	HFR2LFRTemporalSobel(const string & HFRVideoPath, const string & LFRVideoPath);
-	virtual ~HFR2LFRTemporalSobel();
+	HFR2LFRSpatiotemporalGradient(const string & HFRVideoPath, const string & LFRVideoPath);
+	virtual ~HFR2LFRSpatiotemporalGradient();
 
 protected:
 	/**
@@ -26,4 +27,4 @@ protected:
 
 };
 
-#endif /* __HFR2LFRTEMPORALSOBEL_H__ */
+#endif /* __HFR2LFRSPATIOTEMPORALGRADIENT_H__ */

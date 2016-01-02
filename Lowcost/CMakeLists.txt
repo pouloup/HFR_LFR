@@ -5,14 +5,16 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 find_package(OpenCV REQUIRED)
 
 SET(SRC 
-    HFR2LFRTemporalSobel.cpp
+    HFR2LFRTemporalGradient.cpp
+    HFR2LFRSpatiotemporalGradient.cpp
     HFR2LFRInterlaceConverter.cpp
     HFR2LFRConverter.cpp
     main.cpp
     )
 
 SET(HDR
-    HFR2LFRTemporalSobel.h
+    HFR2LFRTemporalGradient.h
+    HFR2LFRSpatiotemporalGradient.h
     HFR2LFRInterlaceConverter.h
     HFR2LFRConverter.h
     Utils.h

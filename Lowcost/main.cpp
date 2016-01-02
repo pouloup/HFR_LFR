@@ -7,7 +7,8 @@
  **************************************************************************/
 
 #include <iostream>
-#include "HFR2LFRTemporalSobel.h"
+#include "HFR2LFRTemporalGradient.h"
+#include "HFR2LFRSpatiotemporalGradient.h"
 using namespace std;
 
 int main( int argc, char* argv[] )
@@ -16,9 +17,10 @@ int main( int argc, char* argv[] )
     string HFRVideoPath = argv[1];
     string LFRVideoPath = argv[2];
 
-    HFR2LFRConverter * converter = new HFR2LFRTemporalSobel(HFRVideoPath, LFRVideoPath);
+    //HFR2LFRConverter * converter = new HFR2LFRTemporalGradient(HFRVideoPath, LFRVideoPath);
+    HFR2LFRConverter * converter = new HFR2LFRSpatiotemporalGradient(HFRVideoPath, LFRVideoPath);
     converter->initialize();
-    converter->convert(120, 24);
+    converter->convert(120, 2450);
     
     return 0;
 }
