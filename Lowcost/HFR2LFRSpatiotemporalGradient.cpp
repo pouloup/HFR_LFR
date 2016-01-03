@@ -36,12 +36,15 @@ void HFR2LFRSpatiotemporalGradient::processFrame()
     convertScaleAbs(prevGradientX, prevGradientX);
     //addWeighted(currentGradientX, 0.5, nextGradientX, 0.5, 0, m_finalFrameBGR);
     //m_finalFrameBGR = (currentGradientX + 2 * nextGradientX - 2 * prevGradientX) / 5 + 127;
-    Mat tempPrevX = currentGradientX - prevGradientX + 127;
-    Mat tempNextX = nextGradientX - currentGradientX + 127;
+    Mat tempPrevX = abs(currentGradientX - prevGradientX) / 2;
+    Mat tempNextX = abs(nextGradientX - currentGradientX) / 2;
     //m_finalFrameBGR = prevGradientX;
     //m_finalFrameBGR = (tempNextX + tempPrevX ) * .5;
-    GaussianBlur(tempNextX, tempNextX, Size(9, 9), 0, 0, BORDER_DEFAULT);
-    addWeighted(tempNextX, 0.5, tempNextX, 0.5, 0, m_finalFrameBGR);
+    //GaussianBlur(tempNextX, tempNextX, Size(9, 9), 0, 0, BORDER_DEFAULT);
+    //GaussianBlur(tempPrevX, tempPrevX, Size(9, 9), 0, 0, BORDER_DEFAULT);
+    m_finalFrameBGR = tempPrevX + tempNextX;
+    GaussianBlur(m_finalFrameBGR, m_finalFrameBGR, Size(9, 9), 0, 0, BORDER_DEFAULT);
+    //addWeighted(tempNextX, 0.5, tempNextX, 0.5, 0, m_finalFrameBGR);
     //m_finalFrameBGR += 127;
     //m_finalFrameBGR = (currentGradientX*0) + (nextGradientX/2) - (prevGradientX/2) + 127;
 
