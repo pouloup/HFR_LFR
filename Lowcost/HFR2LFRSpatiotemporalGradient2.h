@@ -10,11 +10,11 @@
 #define __HFR2LFRSPATIOTEMPORALGRADIENT2_H__
 #include "HFR2LFRConverter.h"
 
-class HFR2LFRSpationtemporalGradient2: public HFR2LFRConverter
+class HFR2LFRSpatiotemporalGradient2: public HFR2LFRConverter
 {
 public:
-	HFR2LFRSpationtemporalGradient2(const string & HFRVideoPath, const string & LFRVideoPath);
-	virtual ~HFR2LFRSpationtemporalGradient2();
+	HFR2LFRSpatiotemporalGradient2(const string & HFRVideoPath, const string & LFRVideoPath);
+	virtual ~HFR2LFRSpatiotemporalGradient2();
 
 protected:
 	/**
