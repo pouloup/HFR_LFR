@@ -26,7 +26,20 @@ void HFR2LFRSpatiotemporalGradient2::processFrame()
     GaussianBlur(m_currentFrame, m_currentFrame, Size(3, 3), 0, 0, BORDER_DEFAULT);
     GaussianBlur(m_prevFrame, m_prevFrame, Size(3, 3), 0, 0, BORDER_DEFAULT);
 
-    m_finalFrameBGR = m_currentFrame;
+    Mat Gx(m_height, m_width, CV_8UC1);
+    Mat Gy(m_height, m_width, CV_8UC1);
+
+    for (int j = 0; j < m_height; j++)
+        for (int i = 1; i < m_width - 1; i++)
+            Gx.at<uchar>(j,i) = (m_prevFrame.at<uchar>(j,i-1) - m_nextFrame.at<uchar>(j,i+1) + 127) / 2; 
+
+    for (int j = 1; j < m_height - 1; j++)
+        for (int i = 0; i < m_width; i++)
+            Gy.at<uchar>(j,i) = (m_prevFrame.at<uchar>(j-1,i) - m_nextFrame.at<uchar>(j+1,i) + 127) / 2; 
+
+    //m_finalFrameBGR = Gx.clone();
+    //Gy.copyTo(m_finalFrameBGR);
+    addWeighted(Gx, 0.5, Gy, 0.5, 0, m_finalFrameBGR);
 
     imshow("TEMP Player", m_finalFrameBGR);
     waitKey(0);
