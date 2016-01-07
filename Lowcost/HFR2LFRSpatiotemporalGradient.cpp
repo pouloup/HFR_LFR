@@ -52,4 +52,3 @@ void HFR2LFRSpatiotemporalGradient::processFrame()
     imshow("TEMP Player", m_finalFrameBGR);
     waitKey(0);
 }
-

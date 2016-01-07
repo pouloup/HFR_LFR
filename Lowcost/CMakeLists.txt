@@ -7,6 +7,7 @@ find_package(OpenCV REQUIRED)
 SET(SRC 
     HFR2LFRTemporalGradient.cpp
     HFR2LFRSpatiotemporalGradient.cpp
+    HFR2LFRSpatiotemporalGradient2.cpp
     HFR2LFRInterlaceConverter.cpp
     HFR2LFRConverter.cpp
     main.cpp
@@ -15,6 +16,7 @@ SET(SRC
 SET(HDR
     HFR2LFRTemporalGradient.h
     HFR2LFRSpatiotemporalGradient.h
+    HFR2LFRSpatiotemporalGradient2.h
     HFR2LFRInterlaceConverter.h
     HFR2LFRConverter.h
     Utils.h
