@@ -23,7 +23,7 @@ void HFR2LFRDecimationConverter::processFrame()
 		cpt++;
 	}
 	else {
-		m_finalFrameBGR = m_prevFrameBGR.clone();
+		//m_finalFrameBGR = m_prevFrameBGR.clone();
 		cpt++;
 	}
 }

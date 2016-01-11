@@ -30,12 +30,12 @@ int main(int argc, char **argv)
 	string HFRVideoPath;
 	ostringstream LFRVideoPath;
 
-	while(video != 1 && video != 2)
+	while(video != 1 && video != 3)
 	{
 		cout << "Quelle video ?" << endl;
 		cout << "1. Chevaux" << endl;
 		cout << "2. Composition" << endl;
-		cout << "3. Sequence Florent" << endl;
+		cout << "3. Sequence Perso" << endl;
 		cout << "Choix : ";
 		cin >> video;
 	}
@@ -53,8 +53,8 @@ int main(int argc, char **argv)
 	}
 	else if (video == 3)
 	{
-		HFRVideoPath = "../../data/sequence_florent_1920x1080_UYVY_120fps.avi";
-		LFRVideoPath << "../../data/sequence_florent_1920x1080_UYVY_60fps_simul";
+		HFRVideoPath = "X:/BCOM/bf.mp4";
+		LFRVideoPath << "X:/BCOM/bf_60fps_simul";
 	}
 
 	while(nbFrames < 0)
