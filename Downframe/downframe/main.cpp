@@ -8,6 +8,7 @@
 #include "HFR2LFRFusionConverter.h"
 #include "HFR2LFRFlowDrawer.h"
 #include "HFR2LFRDecimationConverter.h"
+#include "HFR2LFRYuvReader.h"
 
 using namespace cv;
 using namespace std;
@@ -130,7 +131,8 @@ int main(int argc, char **argv)
 	}
 	else if (method == 5) 
 	{
-		test_in_yuv();
+		HFR2LFRYuvReader test;
+		test.YuvReader("X:/BCOM/Chevaux-90_1920x1080_120Hz_I420_8bits.yuv", 1920, 1080);
 	}
 
 	converter->initialize();
