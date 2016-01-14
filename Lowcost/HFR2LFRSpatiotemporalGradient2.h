@@ -26,7 +26,7 @@ protected:
 
 private:
     void simpleSTGradient(Mat & Gx, Mat & Gy) const;
-
+    void sobelSTGradient(Mat & Gx, Mat & Gy) const;
 
 };
 
