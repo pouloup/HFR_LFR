@@ -24,6 +24,10 @@ protected:
 	**/
 	virtual void processFrame();
 
+private:
+    void simpleSTGradient(Mat & Gx, Mat & Gy) const;
+
+
 };
 
 #endif /* __HFR2LFRSPATIOTEMPORALGRADIENT2_H__ */
