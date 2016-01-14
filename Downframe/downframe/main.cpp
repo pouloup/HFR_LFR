@@ -20,6 +20,30 @@ string secondsToMin(double seconds)
 	return ss.str();
 }
 
+void test_in_yuv() {
+
+	cv::VideoCapture cap("X:/BCOM/Chevaux-90_1920x1080_120Hz_I420_8bits.yuv");
+	if (!cap.isOpened())
+	{
+		std::cout << "!!! Failed to open file: " << "X:/BCOM/Chevaux-90_1920x1080_120Hz_I420_8bits.yuv" << std::endl;
+		return;
+	}
+
+	cv::Mat frame;
+	for (;;)
+	{
+
+		if (!cap.read(frame))
+			break;
+
+		cv::imshow("window", frame);
+
+		char key = cvWaitKey(0);
+		if (key == 27) // ESC
+			break;
+	}
+}
+
 
 int main(int argc, char **argv)
 {
@@ -59,7 +83,7 @@ int main(int argc, char **argv)
 
 	while(nbFrames < 0)
 	{
-		cout << "Nombre de frames LFR a genesrer ?" << endl << "(0 = toutes) : ";
+		cout << "Nombre de frames LFR a generer ?" << endl << "(0 = toutes) : ";
 		cin >> nbFrames;
 	}
 
@@ -69,13 +93,14 @@ int main(int argc, char **argv)
 		cin >> startFrame;
 	}
 
-	while(method < 1 || method > 4)
+	while(method < 1 || method > 5)
 	{
 		cout << "Quelle methode ?" << endl;
 		cout << "1. Fusion d'images" << endl;
 		cout << "2. Flou cinetique" << endl;
 		cout << "3. Afficher seulement le flot optique" << endl;
 		cout << "4. Simple decimation 1/2 frame." << endl;
+		cout << "5. Test de lecture de flux YUV Raw." << endl;
 		cout << "Choix : ";
 		cin >> method;
 	}
@@ -102,6 +127,10 @@ int main(int argc, char **argv)
 	{
 		LFRVideoPath << "decimation1_2.avi";
 		converter = new HFR2LFRDecimationConverter(HFRVideoPath, LFRVideoPath.str());
+	}
+	else if (method == 5) 
+	{
+		test_in_yuv();
 	}
 
 	converter->initialize();

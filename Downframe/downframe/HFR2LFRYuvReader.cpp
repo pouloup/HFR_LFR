@@ -146,7 +146,7 @@ int HFR2LFRYuvReader::YuvReader(int argc, char **argv)
 		cpt++;
 	}
 
-	/*remplir la vid�o d'une frame de plus en cas de nombre impaire de frame*/
+	/*remplir la vidéo d'une frame de plus en cas de nombre impaire de frame*/
 	if (nbFrame % 2 == 1)
 	{
 		cvWriteFrame(writer, bgr);
