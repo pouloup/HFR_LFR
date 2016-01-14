@@ -3,7 +3,12 @@
 
 #include <stdio.h>
 #include <stdint.h>
+
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__) // TODO: check win32 include
 #include <opencv\cv.h>
+#else
+#include <opencv2/opencv.hpp>
+#endif
 
 /**
  * Is returned by the public API functions.

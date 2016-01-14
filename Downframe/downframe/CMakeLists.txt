@@ -11,16 +11,22 @@ find_package(OpenCV REQUIRED)
 SET(SRC 
     HFR2LFRBlurConverter.cpp
     HFR2LFRConverter.cpp
+    HFR2LFRDecimationConverter.cpp
     HFR2LFRFlowDrawer.cpp
     HFR2LFRFusionConverter.cpp
+    HFR2LFRYuvReader.cpp
+    yuv.cpp
     main.cpp
     )
 
 SET(HDR
     HFR2LFRBlurConverter.h
     HFR2LFRConverter.h
+    HFR2LFRDecimationConverter.h
     HFR2LFRFlowDrawer.h
     HFR2LFRFusionConverter.h
+    HFR2LFRYuvReader.h
+    yuv.h
     Utils.h
     )
 
