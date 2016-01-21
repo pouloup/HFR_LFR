@@ -27,7 +27,8 @@ protected:
 private:
     void simpleSTGradient(Mat & Gx, Mat & Gy) const;
     void sobelSTGradient(Mat & Gx, Mat & Gy) const;
-
+    void sobelSTGradient_8UC1(Mat & Gx, Mat & Gy) const;
+    void buildTensor(const Mat & Gx, const Mat & Gy, Mat & tensor) const;
 };
 
 #endif /* __HFR2LFRSPATIOTEMPORALGRADIENT2_H__ */

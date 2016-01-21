@@ -1,8 +1,10 @@
 PROJECT(hfr2lfr_lc)
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
 
 find_package(OpenCV REQUIRED)
+
+add_compile_options("$<$<CONFIG:DEBUG>:-Wall>")
 
 SET(SRC 
     HFR2LFRTemporalGradient.cpp
