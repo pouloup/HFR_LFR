@@ -1,5 +1,6 @@
 /**
  * Authors: Anthony ARCH - Pierre-Henri DAUVERGNE - Jérémy VIGOUR (ESIR)
+ * Paul LE DENN - Florent GUIOTTE - Brieuc DANIEL - Danchi LI (ESIR)
 **/
 
 #include <ctime>
@@ -20,31 +21,6 @@ string secondsToMin(double seconds)
 	ss << min << " min " << seconds-(min*60.0) << " sec";
 	return ss.str();
 }
-
-void test_in_yuv() {
-
-	cv::VideoCapture cap("X:/BCOM/Chevaux-90_1920x1080_120Hz_I420_8bits.yuv");
-	if (!cap.isOpened())
-	{
-		std::cout << "!!! Failed to open file: " << "X:/BCOM/Chevaux-90_1920x1080_120Hz_I420_8bits.yuv" << std::endl;
-		return;
-	}
-
-	cv::Mat frame;
-	for (;;)
-	{
-
-		if (!cap.read(frame))
-			break;
-
-		cv::imshow("window", frame);
-
-		char key = cvWaitKey(0);
-		if (key == 27) // ESC
-			break;
-	}
-}
-
 
 int main(int argc, char **argv)
 {
@@ -68,13 +44,13 @@ int main(int argc, char **argv)
 	if(video == 1)
 	{
 		//HFRVideoPath = "../../data/chevaux_1920x1080_UYVY_120fps.avi";
-		HFRVideoPath = "X:/BCOM/Chevaux-90_1920x1080_120Hz_I420_8bits.avi";
+		HFRVideoPath = "X:/BCOM/Chevaux-90_1920x1080_120Hz_I420_8bits.yuv";
 		LFRVideoPath << "X:/BCOM/Chevaux-90_1920x1080_60Hz_I420_8bits_simul";
 	}
 	else if (video == 2)
 	{
-		HFRVideoPath = "../../data/composition_1920x1080_UYVY_120fps.avi";
-		LFRVideoPath << "../../data/composition_1920x1080_UYVY_60fps_simul";
+		HFRVideoPath = "X:/BCOM/composition_1920x1080_UYVY_120fps.yuv";
+		LFRVideoPath << "X:/BCOM/data/composition_1920x1080_UYVY_60fps_simul";
 	}
 	else if (video == 3)
 	{
@@ -90,18 +66,17 @@ int main(int argc, char **argv)
 
 	while(startFrame <= 0)
 	{
-		cout << "Commencer a la frame : ";
+		cout << "Commencer a la frame ( >=1 ) : ";
 		cin >> startFrame;
 	}
 
-	while(method < 1 || method > 5)
+	while(method < 1 || method > 4)
 	{
 		cout << "Quelle methode ?" << endl;
 		cout << "1. Fusion d'images" << endl;
 		cout << "2. Flou cinetique" << endl;
 		cout << "3. Afficher seulement le flot optique" << endl;
 		cout << "4. Simple decimation 1/2 frame." << endl;
-		cout << "5. Test de lecture de flux YUV Raw." << endl;
 		cout << "Choix : ";
 		cin >> method;
 	}
@@ -126,13 +101,8 @@ int main(int argc, char **argv)
 	}
 	else if(method == 4)
 	{
-		LFRVideoPath << "decimation1_2.avi";
+		LFRVideoPath << "decimation1/2.avi";
 		converter = new HFR2LFRDecimationConverter(HFRVideoPath, LFRVideoPath.str());
-	}
-	else if (method == 5) 
-	{
-		HFR2LFRYuvReader test;
-		test.YuvReader("X:/BCOM/Chevaux-90_1920x1080_120Hz_I420_8bits.yuv", 1920, 1080);
 	}
 
 	converter->initialize();
