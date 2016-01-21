@@ -65,7 +65,7 @@ void HFR2LFRSpatiotemporalGradient2::sobelSTGradient(Mat & Gx, Mat & Gy) const {
         for (int i = 1; i < m_width - 1; i++)
             Gx_v.at<float>(j,i) = 1 * Gx_h.at<float>(j-1, i) + 2 * Gx_h.at<float>(j, i) + 1 * Gx_h.at<float>(j+1, i);
 
-    Gx_v.convertTo(Gx, CV_8UC1); // TODO: negativ part?
+    normalize(Gx_v, Gx, 0, 255, NORM_MINMAX, CV_8UC1);
     Gx_v.release();
     Gx_h.release();
 
@@ -81,5 +81,5 @@ void HFR2LFRSpatiotemporalGradient2::sobelSTGradient(Mat & Gx, Mat & Gy) const {
         for (int i = 1; i < m_width - 1; i++)
             Gy_v.at<float>(j,i) = 1 * Gy_h.at<float>(j, i-1) + 2 * Gy_h.at<float>(j, i) + 1 * Gy_h.at<float>(j, i+1);
 
-    Gy_v.convertTo(Gy, CV_8UC1); // TODO: negativ part?
+    normalize(Gy_v, Gy, 0, 255, NORM_MINMAX, CV_8UC1);
 }
