@@ -1,0 +1,10 @@
+TITRE/sous-titre
+autres(noms)
+résumé(contexte,pbq,méthode,résultat)/mots-clés(4~5) -> en fr&eng
+
+I) Intro (Contexte - présentation du projet / Déf des termes du sujet / PBQ / Explication du plan)
+II) Méthodes (rappel des méthodes utilisées / choix des méthodes que vous avez fait / avantage et contrainte des méthodes choisies / pq lé methode choisie permet de rép à la PQB)
+III) Résultats (ex phrase d'annonce, présenter de manière descriptive -> donner les clés de lecture, ne pas entrer dans l'analyse).
+IV) Conclusions (3 parties : rappel de la question/PBQ, présentation/interprétation des résultats et limite, ouverture).
+
+Références
