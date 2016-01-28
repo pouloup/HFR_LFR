@@ -57,7 +57,7 @@ bool HFR2LFRConverter::initialize()
 }
 
 
-int HFR2LFRConverter::convert(unsigned int nbFrames /*= 0*/, unsigned int startFrame /* = 0*/)
+int HFR2LFRConverter::convert(unsigned int nbFrames, unsigned int startFrame)
 {
 	if(!m_initialized)
 	{
