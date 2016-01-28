@@ -22,8 +22,8 @@
 
 \documentclass[fleqn,10pt]{SelfArx} % Document font size and equations flushed left
 
-\usepackage[english]{babel} % Specify a different language here - english by default
-
+\usepackage[frenchb]{babel} % Specify a different language here - english by default
+\usepackage[utf8]{inputenc}
 \usepackage{lipsum} % Required to insert dummy text. To be removed otherwise
 
 %----------------------------------------------------------------------------------------
@@ -45,23 +45,21 @@
 %----------------------------------------------------------------------------------------
 
 \usepackage{hyperref} % Required for hyperlinks
-\hypersetup{hidelinks,colorlinks,breaklinks=true,urlcolor=color2,citecolor=color1,linkcolor=color1,bookmarksopen=false,pdftitle={Title},pdfauthor={Author}}
+\hypersetup{hidelinks,colorlinks,breaklinks=true,urlcolor=color2,citecolor=color1,linkcolor=color1,bookmarksopen=false,pdftitle={Conversion HFR LFR},pdfauthor={Florent GUIOTTE, Paul LE DENN, Brieuc DANIEL, Danchi LI}}
 
 %----------------------------------------------------------------------------------------
 %	ARTICLE INFORMATION
 %----------------------------------------------------------------------------------------
 
-\JournalInfo{Journal, Vol. XXI, No. 1, 1-5, 2013} % Journal information
-\Archive{Additional note} % Additional notes (e.g. copyright, DOI, review/research article)
+\JournalInfo{Projets Industriels, B$\langle\rangle$COM, ESIR, 2016} % Journal information
+\Archive{Article de restitution} % Additional notes (e.g. copyright, DOI, review/research article)
 
-\PaperTitle{Article Title} % Article title
+\PaperTitle{Conversion HFR LFR} % Article title
 
-\Authors{John Smith\textsuperscript{1}*, James Smith\textsuperscript{2}} % Authors
-\affiliation{\textsuperscript{1}\textit{Department of Biology, University of Examples, London, United Kingdom}} % Author affiliation
-\affiliation{\textsuperscript{2}\textit{Department of Chemistry, University of Examples, London, United Kingdom}} % Author affiliation
-\affiliation{*\textbf{Corresponding author}: john@smith.com} % Corresponding author
+\Authors{Florent GUIOTTE\textsuperscript{1}, Paul LE DENN\textsuperscript{1}, Brieuc DANIEL\textsuperscript{1}, Danchi LI\textsuperscript{1}} % Authors
+\affiliation{\textsuperscript{1}\textit{Imagerie Numérique, École Supérieure d'Ingénieurs de Rennes, Université de Rennes 1, France}} % Author affiliation
 
-\Keywords{Keyword1 --- Keyword2 --- Keyword3} % Keywords - if you don't want any simply remove all the text between the curly brackets
+\Keywords{Conversion --- Framerate --- UHD} % Keywords - if you don't want any simply remove all the text between the curly brackets
 \newcommand{\keywordname}{Keywords} % Defines the keywords heading name
 
 %----------------------------------------------------------------------------------------
@@ -92,10 +90,14 @@
 
 \lipsum[1-3] % Dummy text
  and some mathematics $\cos\pi=-1$ and $\alpha$ in the text\footnote{And some mathematics $\cos\pi=-1$ and $\alpha$ in the text.}.
+\subsection*{Présentation du projet}
+\subsection*{Définition des termes du sujet}
+\subsection*{Problématique}
+\subsection*{Explication du plan}
 
 %------------------------------------------------
 
-\section{Methods}
+\section{Méthodes}
 
 \begin{figure*}[ht]\centering % Using \begin{figure*} makes the figure take up the entire width of the page
 \includegraphics[width=\linewidth]{view}
@@ -118,14 +120,14 @@
 \item Third item in a list
 \end{enumerate}
 
-\subsection{Subsection}
+\subsection{Les méthodes utilisées}
 
 \lipsum[6] % Dummy text
 
 \paragraph{Paragraph} \lipsum[7] % Dummy text
 \paragraph{Paragraph} \lipsum[8] % Dummy text
 
-\subsection{Subsection}
+\subsection{Choix des méthodes utilisées}
 
 \lipsum[9] % Dummy text
 
@@ -136,14 +138,16 @@
 \end{figure}
 
 Reference to Figure \ref{fig:results}.
+\subsection{Avantage et contraintes des méthodes}
+\subsection{Pourquoi les méthodes choisies permettent de répondre à la problématique}
 
 %------------------------------------------------
 
-\section{Results and Discussion}
+\section{Résultats et Discussion}
 
 \lipsum[10] % Dummy text
 
-\subsection{Subsection}
+\subsection{Phase d'annonce}
 
 \lipsum[11] % Dummy text
 
@@ -163,7 +167,7 @@ Richard & Miles & $2$ \\
 \label{tab:label}
 \end{table}
 
-\subsubsection{Subsubsection}
+\subsection{Les clés de lecture}
 
 \lipsum[12] % Dummy text
 
@@ -173,7 +177,7 @@ Richard & Miles & $2$ \\
 \item[Idea] Text
 \end{description}
 
-\subsubsection{Subsubsection}
+\subsubsection{Pas d'analyse}
 
 \lipsum[13] % Dummy text
 
@@ -183,13 +187,16 @@ Richard & Miles & $2$ \\
 \item Third item in a list
 \end{itemize}
 
-\subsubsection{Subsubsection}
-
-\lipsum[14] % Dummy text
-
 \subsection{Subsection}
 
 \lipsum[15-23] % Dummy text
+
+%------------------------------------------------
+
+\section{Conclusion}
+\subsection{Rappel de la question/problématique}
+\subsection{Présentation/interprétation des résultats et limite}
+\subsection{ouverture}
 
 %------------------------------------------------
 \phantomsection
