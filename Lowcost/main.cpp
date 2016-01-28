@@ -23,7 +23,7 @@ int main( int argc, char* argv[] )
     HFR2LFRConverter * converter = new HFR2LFRSpatiotemporalGradient2(HFRVideoPath, LFRVideoPath);
     converter->initialize();
     //converter->convert(10, 100);
-    converter->convert(1000, 150000);
+    converter->convert(2000, 150000);
     
     return 0;
 }

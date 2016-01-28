@@ -91,35 +91,24 @@ void HFR2LFRSpatiotemporalGradient2::sobelSTGradient(Mat & Gx, Mat & Gy) const {
 }
 
 void HFR2LFRSpatiotemporalGradient2::buildTensor(const Mat & Gx, const Mat & Gy, Mat & tensor) const {
-    tensor.create(m_height * 2, m_width * 2, CV_8UC1);
+    tensor.create(m_height, m_width, CV_32FC4);
 
-    // Gx^2
-    Rect roi(0, 0, Gx.cols, Gx.rows);
-    Mat roiTmp(tensor, roi);
+    MatConstIterator_<float> it = Gx.begin<float>();
+    MatConstIterator_<float> jt = Gy.begin<float>();
+    MatIterator_<Vec4f> tt = tensor.begin<Vec4f>();
 
-    Mat Gx2;
-    pow(Gx, 2, Gx2);
-    Gx2.copyTo(roiTmp);
+    for (; it != Gx.end<float>(); it++, jt++, tt++) {
+        Vec4f cell;
+        // Gx²
+        cell[0] = *it * *it;
+    
+        // GxGy
+        cell[1] = *it * *jt;
+        cell[2] = *it * *jt;
 
-    // Gy^2
-    Rect roi2(m_width, m_height, m_width, m_height);
-    Mat roiTmp2 = tensor(roi2);
+        // Gy²
+        cell[3] = *jt * *jt;
 
-    Mat Gy2;
-    pow(Gy, 2, Gy2);
-    Gy.copyTo(roiTmp2);
-
-    // GxGy
-    Rect roi3(m_width, 0, m_width, m_height);
-    Mat roiTmp3(tensor, roi3);
-
-    Mat GxGy(Gx.t() * Gy);
-    GxGy.copyTo(roiTmp3);
-
-    // GyGx
-    Rect roi4(0, m_height, m_width, m_height);
-    Mat roiTmp4(tensor, roi4);
-
-    Mat GyGx(Gy.t() * Gx);
-    GyGx.copyTo(roiTmp4);
+        *tt = cell;
+    }
 }
