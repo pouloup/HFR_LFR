@@ -56,17 +56,37 @@
 
 \PaperTitle{Conversion HFR LFR} % Article title
 
-\Authors{Florent GUIOTTE\textsuperscript{1}, Paul LE DENN\textsuperscript{1}, Brieuc DANIEL\textsuperscript{1}, Danchi LI\textsuperscript{1}} % Authors
-\affiliation{\textsuperscript{1}\textit{Imagerie Numérique, École Supérieure d'Ingénieurs de Rennes, Université de Rennes 1, France}} % Author affiliation
+\Authors{Florent GUIOTTE\textsuperscript{1}, Paul LE DENN\textsuperscript{1}, Brieuc DANIEL\textsuperscript{1}, Danchi LI\textsuperscript{1}\\Olivier LE MEUR\textsuperscript{2}\\Jean-Yves AUBIE\textsuperscript{3}} % Authors
 
-\Keywords{Conversion --- Framerate --- UHD} % Keywords - if you don't want any simply remove all the text between the curly brackets
-\newcommand{\keywordname}{Keywords} % Defines the keywords heading name
+\affiliation{\textsuperscript{1}\textit{Imagerie Numérique, École Supérieure d'Ingénieurs de Rennes, Université de Rennes 1, France\\}
+\textsuperscript{2}\textit{École Supérieure d'Ingénieurs de Rennes, Université de Rennes 1, France\\}
+\textsuperscript{3}\textit{B$\langle\rangle$COM, Rennes, France}
+} % Author affiliation
+
+\Keywords{Haute fréquence d'image (High Frame Rate, HFR), faible fréquence d'image (Low Frame Rate, LFR), flot optique, conversion} % Keywords - if you don't want any simply remove all the text between the curly brackets
+\newcommand{\keywordname}{Mots-Clés} % Defines the keywords heading name
 
 %----------------------------------------------------------------------------------------
 %	ABSTRACT
 %----------------------------------------------------------------------------------------
 
-\Abstract{\lipsum[1]~}
+\Abstract{Le monde de la vidéo a vu naître de nombreux formats durant ces dernières années. Les technologies ont rapidement évoluée et nous permettent de visionner des vidéos en HD, Full HD et même Ultra HD. 
+De la même manière, les cameras permettent de filmer des séquences vidéo HFR avec un rythme d'image de l'ordre de 100 images par seconde — plus fluides que des vidéos LFR — 50 images par secondes. 
+Malheureusement, tous les écrans ne sont pas en mesure d'afficher des vidéos enregistrées à de telles fréquences.
+Nous travaillons en partenariat avec B$\langle\rangle$COM pour effectuer la conversion d'une fréquence élevée vers une fréquence adaptée, afin d'obtenir des vidéos compatibles pour tous les écrans.
+Une vidéo HFR contient des images plus nettes qu'une vidéo LFR, supprimer une image sur deux provoquerait donc des saccades désagréables à l'œil.
+Nous proposons dans notre solution une approche perfectionnée prenant en compte l'effet de flou provoqué par des objets en mouvement.
+Cet effet est naturellement présent dans les vidéos LFR et est appelé flou de mouvement ou flou cinétique.
+Nous détectons le mouvement dans la vidéo via le calcul d'un flot optique et d'un gradient temporel, puis nous appliquons un traitement pour reproduire le flou cinétique selon le mouvement.\\
+
+Le monde de la vidéo a vu naître de nombreux formats durant ces dernières années. Les technologies ont rapidement évoluée et nous permettent de visionner des vidéos en HD, Full HD et même Ultra HD. 
+De la même manière, les cameras permettent de filmer des séquences vidéo HFR avec un rythme d'image de l'ordre de 100 images par seconde — plus fluides que des vidéos LFR — 50 images par secondes. 
+Malheureusement, tous les écrans ne sont pas en mesure d'afficher des vidéos enregistrées à de telles fréquences.
+Nous travaillons en partenariat avec B$\langle\rangle$COM pour effectuer la conversion d'une fréquence élevée vers une fréquence adaptée, afin d'obtenir des vidéos compatibles pour tous les écrans.
+Une vidéo HFR contient des images plus nettes qu'une vidéo LFR, supprimer une image sur deux provoquerait donc des saccades désagréables à l'œil.
+Nous proposons dans notre solution une approche perfectionnée prenant en compte l'effet de flou provoqué par des objets en mouvement.
+Cet effet est naturellement présent dans les vidéos LFR et est appelé flou de mouvement ou flou cinétique.
+Nous détectons le mouvement dans la vidéo via le calcul d'un flot optique et d'un gradient temporel, puis nous appliquons un traitement pour reproduire le flou cinétique selon le mouvement.}
 
 %----------------------------------------------------------------------------------------
 
@@ -85,11 +105,27 @@
 %----------------------------------------------------------------------------------------
 
 \section*{Introduction} % The \section*{} command stops section numbering
-
 \addcontentsline{toc}{section}{Introduction} % Adds this section to the table of contents
 
-\lipsum[1-3] % Dummy text
- and some mathematics $\cos\pi=-1$ and $\alpha$ in the text\footnote{And some mathematics $\cos\pi=-1$ and $\alpha$ in the text.}.
+Les entreprises évoluant dans le domaine du traitement d'image et de la compression vidéo cherchent à développer de nouveaux formats permettant un gain de qualité.
+Pour cela, deux paramètres peuvent être améliorés : la qualité spatiale (résolution d'image, compression) et temporelle (haute fréquence d'image).
+Ces deux paramètres sont l'objet de travaux au sein de l'institut de recherche technologique B$\langle\rangle$COM qui a pour objectif de fournir une meilleure sensation d'immersion des spectateurs dans les contenus audiovisuels.
+Cet institut de recherche possède un laboratoire étudiant le réalisme des contenus.
+Leur but est de développer des outils visant a faciliter la prise en main de ces futurs formats par les professionnels du secteur (cinéma, télévision, jeux, publicité, etc.) et, a terme, par le public.
+Parallèlement, les chercheurs de B$\langle\rangle$COM travaillent sur la possibilité de rendre ces formats lisibles sur des moniteurs non compatibles.
+C'est notamment le cas des vidéos enregistrées à une fréquence d'images élevées, typiquement 100 ou 120 images par seconde (ips), non lisibles sur des écrans qui ne peuvent afficher que 50 ou 60 ips maximum.
+Dans cette optique, nous sommes amenés à proposer une solution permettant de réduire de moitié la fréquence d'image de vidéos HFR sans détériorer la fluidité des mouvements pour le spectateur.
+En HFR, l'intervalle de temps entre 2 images consécutives est très court, les déplacements des objets entre les 2 images le sont donc également.
+La succession des images donne alors une impression de mouvement très proche de la réalité.
+En LFR, cet intervalle de temps étant plus important, la fluidité est obtenue par un rendu plus flou des objets en mouvements (figure 1). Il s'agit du flou cinétique, provoqué par le temps de pose plus long de la camera lors de la capture d'une image.
+Pour réduire la fréquence d'image, la solution intuitive consisterait a supprimer une image sur deux. Néanmoins, des travaux réalises auparavant à B$\langle\rangle$COM ont montré que cette solution n'est pas satisfaisante car elle ne permet pas de retrouver le flou cinétique.
+La vidéo semble alors très hachée.
+De même, des traitements globaux comme une combinaison linéaire classique d'images successives n'élimine pas suffisamment les saccades.
+Dans ce document, nous étudions la manière dont il est possible de simuler le flou cinétique localement sur les images.
+Les deux solutions que nous proposons se basent sur l'estimation du mouvement dans la vidéo originale.
+La première consiste à reprendre l'idée d'une combinaison de plusieurs images, cette fois par pixel.
+La seconde méthode est l'application de flous cinétiques sur les objets qui se déplacent.
+
 \subsection*{Présentation du projet}
 \subsection*{Définition des termes du sujet}
 \subsection*{Problématique}
