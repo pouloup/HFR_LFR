@@ -14,7 +14,7 @@
 class HFR2LFRInterlaceConverter: public HFR2LFRConverter
 {
 public:
-	HFR2LFRInterlaceConverter(const string HFRVideoPath, const string LFRVideoPath);
+	HFR2LFRInterlaceConverter(const string & HFRVideoPath, const string & LFRVideoPath);
 	virtual ~HFR2LFRInterlaceConverter();
 
 protected:

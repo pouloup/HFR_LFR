@@ -7,12 +7,24 @@
  **************************************************************************/
 
 #include <iostream>
+#include "HFR2LFRTemporalGradient.h"
+#include "HFR2LFRSpatiotemporalGradient.h"
+#include "HFR2LFRSpatiotemporalGradient2.h"
+using namespace std;
 
 int main( int argc, char* argv[] )
 {
-    
-    std::cout << "Hello w." << std::endl;
+    if (argc <= 2) return 2; // TODO: usage
+    string HFRVideoPath = argv[1];
+    string LFRVideoPath = argv[2];
 
+    //HFR2LFRConverter * converter = new HFR2LFRTemporalGradient(HFRVideoPath, LFRVideoPath);
+    //HFR2LFRConverter * converter = new HFR2LFRSpatiotemporalGradient(HFRVideoPath, LFRVideoPath);
+    HFR2LFRConverter * converter = new HFR2LFRSpatiotemporalGradient2(HFRVideoPath, LFRVideoPath);
+    converter->initialize();
+    //converter->convert(10, 100);
+    converter->convert(1000, 150000);
+    
     return 0;
 }
 

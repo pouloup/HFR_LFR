@@ -3,6 +3,7 @@
 **/
 
 #include "HFR2LFRConverter.h"
+#include "HFR2LFRYuvReader.h"
 
 void displayError(const std::string & msg)
 {
@@ -29,7 +30,7 @@ HFR2LFRConverter::~HFR2LFRConverter()
 
 bool HFR2LFRConverter::initialize()
 {
-	VideoCapture stream(m_HFRVideoPath);
+	HFR2LFRYuvReader stream(m_HFRVideoPath.c_str(),1920, 1080);
 	Mat firstFrame;
 
 	if(!stream.read(firstFrame))
@@ -37,13 +38,13 @@ bool HFR2LFRConverter::initialize()
 		displayError("Cannot read video, initialization failed!");
 		m_initialized = false;
 	}
-	else
+	else // YUV is RAW VIDEO = NO HEADER
 	{
-		m_width = (int) stream.get(CV_CAP_PROP_FRAME_WIDTH);
-		m_height = (int) stream.get(CV_CAP_PROP_FRAME_HEIGHT);
+		m_width = 1920; //(int)stream.get(CV_CAP_PROP_FRAME_WIDTH);
+		m_height = 1080; //(int)stream.get(CV_CAP_PROP_FRAME_HEIGHT);
 		m_fps = 120;//(int) stream.get(CV_CAP_PROP_FPS); // unreliable
 		m_fourCCCode = CV_FOURCC('I', '4', '2', '0'); //stream.get(CV_CAP_PROP_FOURCC); // unreliable
-		int frameCount = (int) stream.get(CV_CAP_PROP_FRAME_COUNT);
+		int frameCount = -1; //(int) stream.get(CV_CAP_PROP_FRAME_COUNT);
 
 		displayInfo("Properties: ");
 		cout << "  " << m_width << "x" << m_height << endl;
@@ -56,7 +57,7 @@ bool HFR2LFRConverter::initialize()
 }
 
 
-int HFR2LFRConverter::convert(unsigned int nbFrames /*= 0*/, unsigned int startFrame /* = 0*/)
+int HFR2LFRConverter::convert(unsigned int nbFrames, unsigned int startFrame)
 {
 	if(!m_initialized)
 	{
@@ -65,10 +66,12 @@ int HFR2LFRConverter::convert(unsigned int nbFrames /*= 0*/, unsigned int startF
 	}
 
 	unsigned int cpt = 1;
-	VideoCapture stream(m_HFRVideoPath);
+
+	//VideoCapture stream(m_HFRVideoPath);
+	HFR2LFRYuvReader stream(m_HFRVideoPath.c_str(), 1920, 1080);
 
 	VideoWriter writer;
-	writer.open(m_LFRVideoPath, m_fourCCCode, m_fps, Size(m_width, m_height), 1);
+	writer.open(m_LFRVideoPath, m_fourCCCode, 60/*m_fps*/, Size(m_width, m_height), 1);
 
 	// Aller à l'image demandée
 	stream.set(CV_CAP_PROP_POS_FRAMES, max((int)startFrame-1, 0));
@@ -79,7 +82,7 @@ int HFR2LFRConverter::convert(unsigned int nbFrames /*= 0*/, unsigned int startF
 		displayError("No more frame to read");
 		return ERR_NO_MORE_FRAME;
 	}
-
+	
 	// Convertir images en niveaux de gris
 	cvtColor(m_prevFrameBGR,    m_prevFrame,    CV_BGR2GRAY);
 	cvtColor(m_currentFrameBGR, m_currentFrame, CV_BGR2GRAY);

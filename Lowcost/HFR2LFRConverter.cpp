@@ -41,14 +41,17 @@ bool HFR2LFRConverter::initialize()
 	{
 		m_width = (int) stream.get(CV_CAP_PROP_FRAME_WIDTH);
 		m_height = (int) stream.get(CV_CAP_PROP_FRAME_HEIGHT);
-		m_fps = 120;//(int) stream.get(CV_CAP_PROP_FPS); // unreliable
-		m_fourCCCode = CV_FOURCC('I', '4', '2', '0'); //stream.get(CV_CAP_PROP_FOURCC); // unreliable
+		m_fps = (int) stream.get(CV_CAP_PROP_FPS); // unreliable
+		//m_fps = 120;//(int) stream.get(CV_CAP_PROP_FPS); // unreliable
+		m_fourCCCode = stream.get(CV_CAP_PROP_FOURCC); // unreliable
+		//m_fourCCCode = CV_FOURCC('I', '4', '2', '0'); //stream.get(CV_CAP_PROP_FOURCC); // unreliable
 		int frameCount = (int) stream.get(CV_CAP_PROP_FRAME_COUNT);
 
 		displayInfo("Properties: ");
 		cout << "  " << m_width << "x" << m_height << endl;
 		cout << "  " << m_fps << " fps" << endl;
 		cout << "  " << frameCount << " frames" << endl;
+		cout << "  " << m_fourCCCode << " 4CCCode" << endl;
 		m_initialized = true;
 	}
 
@@ -68,7 +71,8 @@ int HFR2LFRConverter::convert(unsigned int nbFrames /*= 0*/, unsigned int startF
 	VideoCapture stream(m_HFRVideoPath);
 
 	VideoWriter writer;
-	writer.open(m_LFRVideoPath, m_fourCCCode, m_fps, Size(m_width, m_height), 1);
+	//writer.open(m_LFRVideoPath, m_fourCCCode, m_fps, Size(m_width, m_height), 1);
+	writer.open(m_LFRVideoPath, CV_FOURCC('X','2','6','4'), m_fps, Size(m_width, m_height), 1);
 
 	// Aller à l'image demandée
 	stream.set(CV_CAP_PROP_POS_FRAMES, max((int)startFrame-1, 0));

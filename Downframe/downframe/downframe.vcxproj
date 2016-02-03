@@ -171,14 +171,18 @@
     <ClCompile Include="HFR2LFRFusionConverter.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="HFR2LFRBlurConverter.cpp" />
+    <ClCompile Include="HFR2LFRYuvReader.cpp" />
+    <ClCompile Include="HFR2LFRYuv.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HFR2LFRConverter.h" />
     <ClInclude Include="HFR2LFRDecimationConverter.h" />
     <ClInclude Include="HFR2LFRFlowDrawer.h" />
     <ClInclude Include="HFR2LFRFusionConverter.h" />
+    <ClInclude Include="HFR2LFRYuvReader.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="HFR2LFRBlurConverter.h" />
+    <ClInclude Include="HFR2LFRYuv.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

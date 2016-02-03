@@ -1,5 +1,6 @@
 /**
  * Authors: Anthony ARCH - Pierre-Henri DAUVERGNE - Jérémy VIGOUR (ESIR)
+ * Paul LE DENN - Florent GUIOTTE - Brieuc DANIEL - Danchi LI (ESIR)
 **/
 
 #include <ctime>
@@ -8,6 +9,7 @@
 #include "HFR2LFRFusionConverter.h"
 #include "HFR2LFRFlowDrawer.h"
 #include "HFR2LFRDecimationConverter.h"
+#include "HFR2LFRYuvReader.h"
 
 using namespace cv;
 using namespace std;
@@ -20,7 +22,6 @@ string secondsToMin(double seconds)
 	return ss.str();
 }
 
-
 int main(int argc, char **argv)
 {
 	int video = 0;
@@ -30,12 +31,12 @@ int main(int argc, char **argv)
 	string HFRVideoPath;
 	ostringstream LFRVideoPath;
 
-	while(video != 1 && video != 2)
+	while(video != 1 && video != 3)
 	{
 		cout << "Quelle video ?" << endl;
 		cout << "1. Chevaux" << endl;
 		cout << "2. Composition" << endl;
-		cout << "3. Sequence Florent" << endl;
+		cout << "3. Sequence Perso" << endl;
 		cout << "Choix : ";
 		cin >> video;
 	}
@@ -43,29 +44,29 @@ int main(int argc, char **argv)
 	if(video == 1)
 	{
 		//HFRVideoPath = "../../data/chevaux_1920x1080_UYVY_120fps.avi";
-		HFRVideoPath = "X:/BCOM/Chevaux-90_1920x1080_120Hz_I420_8bits.avi";
+		HFRVideoPath = "X:/BCOM/Chevaux-90_1920x1080_120Hz_I420_8bits.yuv";
 		LFRVideoPath << "X:/BCOM/Chevaux-90_1920x1080_60Hz_I420_8bits_simul";
 	}
 	else if (video == 2)
 	{
-		HFRVideoPath = "../../data/composition_1920x1080_UYVY_120fps.avi";
-		LFRVideoPath << "../../data/composition_1920x1080_UYVY_60fps_simul";
+		HFRVideoPath = "X:/BCOM/composition_1920x1080_UYVY_120fps.yuv";
+		LFRVideoPath << "X:/BCOM/data/composition_1920x1080_UYVY_60fps_simul";
 	}
 	else if (video == 3)
 	{
-		HFRVideoPath = "../../data/sequence_florent_1920x1080_UYVY_120fps.avi";
-		LFRVideoPath << "../../data/sequence_florent_1920x1080_UYVY_60fps_simul";
+		HFRVideoPath = "X:/BCOM/bf.mp4";
+		LFRVideoPath << "X:/BCOM/bf_60fps_simul";
 	}
 
 	while(nbFrames < 0)
 	{
-		cout << "Nombre de frames LFR a genesrer ?" << endl << "(0 = toutes) : ";
+		cout << "Nombre de frames LFR a generer ?" << endl << "(0 = toutes) : ";
 		cin >> nbFrames;
 	}
 
 	while(startFrame <= 0)
 	{
-		cout << "Commencer a la frame : ";
+		cout << "Commencer a la frame ( >=1 ) : ";
 		cin >> startFrame;
 	}
 
@@ -100,7 +101,7 @@ int main(int argc, char **argv)
 	}
 	else if(method == 4)
 	{
-		LFRVideoPath << "decimation1_2.avi";
+		LFRVideoPath << "decimation1/2.avi";
 		converter = new HFR2LFRDecimationConverter(HFRVideoPath, LFRVideoPath.str());
 	}
 
