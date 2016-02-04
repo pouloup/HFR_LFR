@@ -10,6 +10,8 @@
 #include "HFR2LFRFlowDrawer.h"
 #include "HFR2LFRDecimationConverter.h"
 #include "HFR2LFRYuvReader.h"
+#include "HFR2LFRMix5050.h"
+#include "HFR2LFRMix255025.h"
 
 using namespace cv;
 using namespace std;
@@ -45,17 +47,17 @@ int main(int argc, char **argv)
 	{
 		//HFRVideoPath = "../../data/chevaux_1920x1080_UYVY_120fps.avi";
 		HFRVideoPath = "X:/BCOM/Chevaux-90_1920x1080_120Hz_I420_8bits.yuv";
-		LFRVideoPath << "X:/BCOM/Chevaux-90_1920x1080_60Hz_I420_8bits_simul";
+		LFRVideoPath << "X:/BCOM/Chevaux-90_1920x1080_60Hz_I420_8bits_simul_";
 	}
 	else if (video == 2)
 	{
 		HFRVideoPath = "X:/BCOM/composition_1920x1080_UYVY_120fps.yuv";
-		LFRVideoPath << "X:/BCOM/data/composition_1920x1080_UYVY_60fps_simul";
+		LFRVideoPath << "X:/BCOM/data/composition_1920x1080_UYVY_60fps_simul_";
 	}
 	else if (video == 3)
 	{
 		HFRVideoPath = "X:/BCOM/bf.mp4";
-		LFRVideoPath << "X:/BCOM/bf_60fps_simul";
+		LFRVideoPath << "X:/BCOM/bf_60fps_simul_";
 	}
 
 	while(nbFrames < 0)
@@ -70,13 +72,15 @@ int main(int argc, char **argv)
 		cin >> startFrame;
 	}
 
-	while(method < 1 || method > 4)
+	while(method < 1 || method > 6)
 	{
 		cout << "Quelle methode ?" << endl;
 		cout << "1. Fusion d'images" << endl;
 		cout << "2. Flou cinetique" << endl;
 		cout << "3. Afficher seulement le flot optique" << endl;
 		cout << "4. Simple decimation 1/2 frame." << endl;
+		cout << "5. 50/50 sur les images." << endl;
+		cout << "6. 25/50/25 sur les images." << endl;
 		cout << "Choix : ";
 		cin >> method;
 	}
@@ -101,8 +105,18 @@ int main(int argc, char **argv)
 	}
 	else if(method == 4)
 	{
-		LFRVideoPath << "decimation1/2.avi";
+		LFRVideoPath << "decimation1_2.avi";
 		converter = new HFR2LFRDecimationConverter(HFRVideoPath, LFRVideoPath.str());
+	}
+	else if (method == 5)
+	{
+		LFRVideoPath << "decimation50_50.avi";
+		converter = new HFR2LFRMix5050(HFRVideoPath, LFRVideoPath.str());
+	}
+	else if (method == 6)
+	{
+		LFRVideoPath << "decimation25_50_25.avi";
+		converter = new HFR2LFRMix255025(HFRVideoPath, LFRVideoPath.str());
 	}
 
 	converter->initialize();
