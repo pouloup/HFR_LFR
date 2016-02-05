@@ -169,16 +169,21 @@
     <ClCompile Include="HFR2LFRDecimationConverter.cpp" />
     <ClCompile Include="HFR2LFRFlowDrawer.cpp" />
     <ClCompile Include="HFR2LFRFusionConverter.cpp" />
+    <ClCompile Include="HFR2LFRMix255025.cpp" />
+    <ClCompile Include="HFR2LFRMix5050.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="HFR2LFRBlurConverter.cpp" />
     <ClCompile Include="HFR2LFRYuvReader.cpp" />
     <ClCompile Include="HFR2LFRYuv.cpp" />
+    <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HFR2LFRConverter.h" />
     <ClInclude Include="HFR2LFRDecimationConverter.h" />
     <ClInclude Include="HFR2LFRFlowDrawer.h" />
     <ClInclude Include="HFR2LFRFusionConverter.h" />
+    <ClInclude Include="HFR2LFRMix255025.h" />
+    <ClInclude Include="HFR2LFRMix5050.h" />
     <ClInclude Include="HFR2LFRYuvReader.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="HFR2LFRBlurConverter.h" />
