@@ -39,3 +39,10 @@
 *.vcxproj
 *.opensdf
 *.sdf
+
+# Latex
+*.aux
+*.toc
+*.log
+*.out
+
