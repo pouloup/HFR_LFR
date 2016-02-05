@@ -18,6 +18,22 @@ int main( int argc, char* argv[] )
     string HFRVideoPath = argv[1];
     string LFRVideoPath = argv[2];
 
+    cv::Vec4f aze(1, 2, 3, 4);
+    cout << aze[1] << endl;
+    //cv::Mat test(aze);
+    cv::Mat test(2, 2, CV_32FC1);
+    //test.reshape(0, 2);
+    //test.resize(2);
+    *(test.begin<float>() + 0) = aze[0];
+    *(test.begin<float>() + 1) = aze[1];
+    *(test.begin<float>() + 2) = aze[2];
+    *(test.begin<float>() + 3) = aze[3];
+    Mat ttest;
+    normalize(test, ttest, 0, 1, NORM_MINMAX, CV_32FC1);
+    cout << aze << endl;
+    cout << test << endl;
+    return 0;
+
     //HFR2LFRConverter * converter = new HFR2LFRTemporalGradient(HFRVideoPath, LFRVideoPath);
     //HFR2LFRConverter * converter = new HFR2LFRSpatiotemporalGradient(HFRVideoPath, LFRVideoPath);
     HFR2LFRConverter * converter = new HFR2LFRSpatiotemporalGradient2(HFRVideoPath, LFRVideoPath);
