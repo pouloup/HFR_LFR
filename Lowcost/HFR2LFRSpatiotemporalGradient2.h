@@ -29,6 +29,11 @@ private:
     void sobelSTGradient(Mat & Gx, Mat & Gy) const;
     void sobelSTGradient_8UC1(Mat & Gx, Mat & Gy) const;
     void buildTensor(const Mat & Gx, const Mat & Gy, Mat & tensor) const;
+
+private:
+    cv::Vec2f getNormalDirection(const cv::Vec4f & tensor) const;
+    float getNormValue(const cv::Vec4f & tensor) const;
+    float getDeltaSqrt(const cv::Vec4f & tensor) const;
 };
 
 #endif /* __HFR2LFRSPATIOTEMPORALGRADIENT2_H__ */

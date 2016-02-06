@@ -112,3 +112,24 @@ void HFR2LFRSpatiotemporalGradient2::buildTensor(const Mat & Gx, const Mat & Gy,
         *tt = cell;
     }
 }
+
+Vec2f HFR2LFRSpatiotemporalGradient2::getNormalDirection(const Vec4f & tensor) const {
+    float a = 2 * tensor[1];
+    float b = tensor[3] - tensor[0] + getDeltaSqrt(tensor);
+
+    return Vec2f(a, b);
+}
+
+float HFR2LFRSpatiotemporalGradient2::getNormValue(const Vec4f & tensor) const {
+    float a = (tensor[0] + tensor[3] + getDeltaSqrt(tensor)) / 2;
+    float b = (tensor[0] + tensor[3] - getDeltaSqrt(tensor)) / 2;
+    float c = (a - b) / (a + b);
+    return c * c;
+}
+
+float HFR2LFRSpatiotemporalGradient2::getDeltaSqrt(const Vec4f & tensor) const {
+    float a = tensor[0] - tensor[3];
+    float b = tensor[1];
+    // TODO: tweak computation
+    return sqrt(a * a  + 4 * b * b);
+}
