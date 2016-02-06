@@ -34,7 +34,8 @@ void HFR2LFRSpatiotemporalGradient2::processFrame()
     Mat tensor;
     buildTensor(Gx, Gy, tensor);
 
-    constructNormDisp(m_finalFrameBGR, tensor);
+    //constructNormDisp(m_finalFrameBGR, tensor);
+    constructNormalDirDisp(m_finalFrameBGR, tensor);
     //normalize(Gx, Gx, 0, 255, NORM_MINMAX, CV_8UC1);
     //normalize(Gy, Gy, 0, 255, NORM_MINMAX, CV_8UC1);
     //addWeighted(Gx, 0, Gy, 1, 0, m_finalFrameBGR);
@@ -126,6 +127,19 @@ void HFR2LFRSpatiotemporalGradient2::constructNormDisp(Mat & norm, const Mat & t
     normalize(normf, norm, 0, 255, NORM_MINMAX, CV_8UC1);
 }
 
+void HFR2LFRSpatiotemporalGradient2::constructNormalDirDisp(Mat & normal, const Mat & tensor) const {
+    normal.create(m_height, m_width, CV_8UC1);
+
+    MatConstIterator_<Vec4f> tt = tensor.begin<Vec4f>();
+    MatIterator_<unsigned char> nt = normal.begin<unsigned char>();
+
+    for (; tt != tensor.end<Vec4f>(); tt++, nt++) {
+        Vec2f ndir = getNormalDirection(*tt);
+        float rdir = atan2(ndir[0], ndir[1]);
+        *nt = 127 + rdir * 40; 
+    }
+}
+
 Vec2f HFR2LFRSpatiotemporalGradient2::getNormalDirection(const Vec4f & tensor) const {
     float a = 2 * tensor[1];
     float b = tensor[3] - tensor[0] + getDeltaSqrt(tensor);
@@ -134,18 +148,24 @@ Vec2f HFR2LFRSpatiotemporalGradient2::getNormalDirection(const Vec4f & tensor) c
 }
 
 float HFR2LFRSpatiotemporalGradient2::getNormValue(const Vec4f & tensor) const {
-    float a = (tensor[0] + tensor[3] + getDeltaSqrt(tensor)) / 2;
-    float b = (tensor[0] + tensor[3] - getDeltaSqrt(tensor)) / 2;
+    double wtf = tensor[0] + tensor[3];
+    double d = getDeltaSqrt(tensor);
+    double a = (wtf + d) / 2.0f;
+    double b = (wtf - d) / 2.0f;
+    //double a = (tensor[0] + tensor[3] + getDeltaSqrt(tensor)) / 2.0f;
+    //double b = (tensor[0] + tensor[3] - getDeltaSqrt(tensor)) / 2.0f;
 
     if ( a + b == 0 ) return 0;
 
-    float c = (a - b) / (a + b);
+    double c = (a - b) / (a + b);
+    //cout << wtf << ":" << d << " ";
+    //cout << a << ":" << b << " ";
     return c * c;
 }
 
 float HFR2LFRSpatiotemporalGradient2::getDeltaSqrt(const Vec4f & tensor) const {
-    float a = tensor[0] - tensor[3];
-    float b = tensor[1];
+    double a = tensor[0] - tensor[3];
+    double b = tensor[1] * tensor[1];
     // TODO: tweak computation
-    return sqrt(a * a  + 4 * b * b);
+    return sqrt(a * a  + 4 * b);
 }
