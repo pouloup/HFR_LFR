@@ -30,6 +30,8 @@ private:
     void sobelSTGradient_8UC1(Mat & Gx, Mat & Gy) const;
     void buildTensor(const Mat & Gx, const Mat & Gy, Mat & tensor) const;
 
+    void constructNormDisp(Mat & norm, const Mat & tensor) const;
+
 private:
     cv::Vec2f getNormalDirection(const cv::Vec4f & tensor) const;
     float getNormValue(const cv::Vec4f & tensor) const;

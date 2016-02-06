@@ -34,9 +34,10 @@ void HFR2LFRSpatiotemporalGradient2::processFrame()
     Mat tensor;
     buildTensor(Gx, Gy, tensor);
 
-    normalize(Gx, Gx, 0, 255, NORM_MINMAX, CV_8UC1);
-    normalize(Gy, Gy, 0, 255, NORM_MINMAX, CV_8UC1);
-    addWeighted(Gx, 0, Gy, 1, 0, m_finalFrameBGR);
+    constructNormDisp(m_finalFrameBGR, tensor);
+    //normalize(Gx, Gx, 0, 255, NORM_MINMAX, CV_8UC1);
+    //normalize(Gy, Gy, 0, 255, NORM_MINMAX, CV_8UC1);
+    //addWeighted(Gx, 0, Gy, 1, 0, m_finalFrameBGR);
     imshow("TEMP Player", m_finalFrameBGR);
     waitKey(1);
 }
@@ -113,6 +114,18 @@ void HFR2LFRSpatiotemporalGradient2::buildTensor(const Mat & Gx, const Mat & Gy,
     }
 }
 
+void HFR2LFRSpatiotemporalGradient2::constructNormDisp(Mat & norm, const Mat & tensor) const {
+    Mat normf(m_height, m_width, CV_32FC1);
+
+    MatConstIterator_<Vec4f> tt = tensor.begin<Vec4f>();
+    MatIterator_<float> nt = normf.begin<float>();
+
+    for (; tt != tensor.end<Vec4f>(); tt++, nt++)
+        *nt = getNormValue(*tt);
+
+    normalize(normf, norm, 0, 255, NORM_MINMAX, CV_8UC1);
+}
+
 Vec2f HFR2LFRSpatiotemporalGradient2::getNormalDirection(const Vec4f & tensor) const {
     float a = 2 * tensor[1];
     float b = tensor[3] - tensor[0] + getDeltaSqrt(tensor);
@@ -123,6 +136,9 @@ Vec2f HFR2LFRSpatiotemporalGradient2::getNormalDirection(const Vec4f & tensor) c
 float HFR2LFRSpatiotemporalGradient2::getNormValue(const Vec4f & tensor) const {
     float a = (tensor[0] + tensor[3] + getDeltaSqrt(tensor)) / 2;
     float b = (tensor[0] + tensor[3] - getDeltaSqrt(tensor)) / 2;
+
+    if ( a + b == 0 ) return 0;
+
     float c = (a - b) / (a + b);
     return c * c;
 }
