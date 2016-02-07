@@ -35,7 +35,8 @@ void HFR2LFRSpatiotemporalGradient2::processFrame()
     buildTensor(Gx, Gy, tensor);
 
     //constructNormDisp(m_finalFrameBGR, tensor);
-    constructNormalDirDisp(m_finalFrameBGR, tensor);
+    //constructNormalDirDisp(m_finalFrameBGR, tensor);
+    constructNormalDirDispBGR(m_finalFrameBGR, tensor);
     //normalize(Gx, Gx, 0, 255, NORM_MINMAX, CV_8UC1);
     //normalize(Gy, Gy, 0, 255, NORM_MINMAX, CV_8UC1);
     //addWeighted(Gx, 0, Gy, 1, 0, m_finalFrameBGR);
@@ -138,6 +139,25 @@ void HFR2LFRSpatiotemporalGradient2::constructNormalDirDisp(Mat & normal, const 
         float rdir = atan2(ndir[0], ndir[1]);
         *nt = 127 + rdir * 40; 
     }
+}
+
+void HFR2LFRSpatiotemporalGradient2::constructNormalDirDispBGR(Mat & normalBGR, const Mat & tensor) const {
+    //normal.create(m_height, m_width, CV_8UC1);
+    Mat normalHSV(m_height, m_width, CV_32FC3);
+
+    MatConstIterator_<Vec4f> tt = tensor.begin<Vec4f>();
+    MatIterator_<Vec3f> nt = normalHSV.begin<Vec3f>();
+
+    for (; tt != tensor.end<Vec4f>(); tt++, nt++) {
+        Vec2f ndir = getNormalDirection(*tt);
+        float rdir = atan2(ndir[0], ndir[1]);
+        (*nt)[0] = 180 + rdir * 180 / CV_PI; 
+        (*nt)[1] = 255; 
+        (*nt)[2] = 255; 
+        cout << *nt << " ";
+    }
+
+    cvtColor(normalHSV, normalBGR, CV_HSV2BGR);
 }
 
 Vec2f HFR2LFRSpatiotemporalGradient2::getNormalDirection(const Vec4f & tensor) const {

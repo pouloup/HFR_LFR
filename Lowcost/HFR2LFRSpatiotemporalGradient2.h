@@ -32,6 +32,7 @@ private:
 
     void constructNormDisp(Mat & norm, const Mat & tensor) const;
     void constructNormalDirDisp(Mat & normal, const Mat & tensor) const;
+    void constructNormalDirDispBGR(Mat & normalBGR, const Mat & tensor) const;
 
 private:
     cv::Vec2f getNormalDirection(const cv::Vec4f & tensor) const;
