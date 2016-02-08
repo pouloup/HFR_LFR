@@ -158,6 +158,91 @@ La seconde méthode est l'application de flous cinétiques sur les objets qui se
 \end{enumerate}
 
 \subsection{Les méthodes utilisées}
+%\include{gradient tst}
+\subsubsection{Gradient spatio temporel}
+L'une des méthode testée pour générer du flou de mouvement est l'approximation du flot optique à l'aide de
+gradients.
+% TODO: expliquer le flot optique
+Cette solution se veut peu coûteuse en calcul, contrairement à la méthode proposée l'année dernière qui
+cherche à déterminer précisement le flot optique.
+
+En prenant un flux vidéo, le principe est de générer un gradient en prenant en compte l'image précédente et
+l'image suivante en plus de la prise en compte du spatiale d'un gradient classique, d'où la notion temporel.
+
+Pour la suite de l'explication de la méthode, nous utiliserons les notations suivantes~:
+\begin{itemize}
+    \item $I$ : la vidéo, une succession d'image
+    \item $I(x, y, t)$ : le pixel de coordonnée $(x, y)$ de l'image $t$
+    \item $G$ : un gradient
+\end{itemize}
+Soit $ I : \Omega \in \mathbb{R}^{3} \to \mathbb{R}^{3} $,
+soit $ G : \Omega \in \mathbb{R}^{3} \to \mathbb{R}^{2} $.
+
+$G(x, y, t)$ représente le vecteur gradient associé au pixel de coordonnée $(x, y)$ de l'image $t$,
+Ce qui permet de prendre en compte le temps.
+% Temporel
+
+\[G(x,y,t) = 
+    \begin{cases}
+        G_{x}(x,y,t) \\
+        G_{y}(x,y,t)
+    \end{cases}
+\]
+
+Où $G_{x}$ représente le gradient en $x$ et $G_{y}$ le gradient en $y$, semblable à un gradient classique, 
+ce qui permet de prendre en compte l'espace.
+
+Par soucis de lisibilité, on utilise $t$ pour symboliser l'emplacement relatif dans le flux d'image, où $t_{0}$ représente donc
+l'image actuelle, $t_{-1}$ l'image précédente et $t_{+1}$ l'image suivante.
+
+Dans un premier temps, on utilise un calcul simple du gradient~:
+\[
+    \begin{cases}
+        G_{x}(x,y,t_{0}) = I(x^{-1}, y, t_{-1}) - I(x^{+1}, y, t_{+1}) \\
+        G_{y}(x,y,t_{0}) = I(x, y^{-1}, t_{-1}) - I(x, y^{+1}, t_{+1}) \\
+    \end{cases}
+\]
+où on effectue un différence entre le pixel précédent en $x$ ou $y$ entre l'image suivante et l'image
+précédente. On obtiens les contours des objets et des zones de mouvements.
+% TODO: images démo ?
+
+Dans un deuxième temps, afin de d'augmenter la robustesse de cet opérateur de gradient,
+notre solution implémente un filtre de sobel adapté à notre utilisation temporel.
+Le filtre de sobel par rapport à la première solution a un rôle de filtre passe bas pour limiter 
+l'influence du bruit de la séquence vidéo sur notre estimation de mouvement~:
+
+\[
+    %\begin{bmatrix}
+    %    -1 & 0 & 1 \\
+    %    -2 & 0 & 2 \\
+    %    -1 & 0 & 1 
+    %\end{bmatrix}
+    \begin{cases}
+        G_{x}(x,y,t_{0}) = \ldots \\
+        %\begin{bmatrix}
+        %    I(x^{-1}, y^{-1}, t_{-1}) & 0 & I(x^{-1}, y^{+1}, t_{+1}) \\
+        %    0 & 0 & 0 \\
+        %    I(x^{+1}, y^{-1}, t_{-1}) & 0 & I(x^{+1}, y^{+1}, t_{+1}) \\
+        %\end{bmatrix} \\
+        G_{y}(x,y,t_{0}) = 
+        \begin{bmatrix}
+            I(x^{-1}, y^{-1}, t_{-1}) & 0 & I(x^{-1}, y^{+1}, t_{+1}) \\
+            2 \times I(x,      y^{-1}, t_{-1}) & 0 & 2 \times I(x,      y^{+1}, t_{+1}) \\
+            I(x^{+1}, y^{-1}, t_{-1}) & 0 & I(x^{+1}, y^{+1}, t_{+1}) \\
+        \end{bmatrix}
+    \end{cases}
+\]
+
+On calcul le tenseur de structure associé à notre gradient précédemment obtenus tel que~:
+\[
+    T(x, y, t_{0}) = 
+    \begin{bmatrix}
+        G_{x}(x,y,t_{0})^{2} & G_{x}(x,y,t_{0})G_{y}(x,y,t_{0}) \\
+        G_{y}(x,y,t_{0})G_{x}(x,y,t_{0}) & G_{y}(x,y,t_{0})^{2} \\
+    \end{bmatrix}
+\]
+Les vecteurs propres et les valeurs propres de ce tenseur permettent d'obtenir rapidement la direction normale
+au gradient et la norme du gradient. Par extension, la direction du déplacement et sa vitesse.
 
 \lipsum[6] % Dummy text
 
