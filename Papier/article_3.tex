@@ -158,6 +158,22 @@ La seconde méthode est l'application de flous cinétiques sur les objets qui se
 \end{enumerate}
 
 \subsection{Les méthodes utilisées}
+%\include{gradient tst}
+\subsubsection{Gradient spatio temporel}
+L'une des méthode testée pour générer du flou de mouvement est l'approximation du flot optique à l'aide de
+gradients.
+% TODO: expliquer le flot optique
+Cette solution se veut peu coûteuse en calcul, contrairement à la méthode proposée l'année dernière qui
+cherche à déterminer précisement le flot optique.
+
+En prenant un flux vidéo, le principe est de générer un gradient en prenant en compte l'image précédente et
+l'image suivante en plus de la prise en compte spatiale d'un gradient classique, d'où la notion temporel.
+
+$ I : \Omega \in \mathbb{R}^{3} \to \mathbb{R}^{3} $
+
+
+
+
 
 \lipsum[6] % Dummy text
 
