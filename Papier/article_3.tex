@@ -45,6 +45,7 @@
 %   MACROS
 %----------------------------------------------------------------------------------------
 \newcommand{\bcom}{b$\textless\textgreater$com\xspace}
+\newcommand{\T}{T(x, y, t_{0})}
 
 %----------------------------------------------------------------------------------------
 %	HYPERLINKS
@@ -102,7 +103,7 @@ We detect motion in the video through calculating an optical flow and a temporal
 
 \maketitle % Print the title and abstract box
 
-\tableofcontents % Print the contents section
+%\tableofcontents % Print the contents section
 
 \thispagestyle{empty} % Removes page numbering from the first page
 
@@ -136,35 +137,14 @@ La seconde méthode est l'application de flous cinétiques sur les objets qui se
 
 \section{Méthodes}
 
-\begin{figure*}[ht]\centering % Using \begin{figure*} makes the figure take up the entire width of the page
-\includegraphics[width=\linewidth]{view}
-\caption{Wide Picture}
-\label{fig:view}
-\end{figure*}
-
-\lipsum[4] % Dummy text
-
-\begin{equation}
-\cos^3 \theta =\frac{1}{4}\cos\theta+\frac{3}{4}\cos 3\theta
-\label{eq:refname2}
-\end{equation}
-
-\lipsum[5] % Dummy text
-
-\begin{enumerate}[noitemsep] % [noitemsep] removes whitespace between the items for a compact look
-\item First item in a list
-\item Second item in a list
-\item Third item in a list
-\end{enumerate}
-
 \subsection{Les méthodes utilisées}
 %\include{gradient tst}
 \subsubsection{Gradient spatio temporel}
-L'une des méthode testée pour générer du flou de mouvement est l'approximation du flot optique à l'aide de
-gradients.
+L'une des méthode testée pour générer du flou de mouvement est l'approximation du flot optique à l'aide
+d'un gradient spatio temporel.
 % TODO: expliquer le flot optique
 Cette solution se veut peu coûteuse en calcul, contrairement à la méthode proposée l'année dernière qui
-cherche à déterminer précisement le flot optique.
+cherche à déterminer précisément le flot optique.
 
 En prenant un flux vidéo, le principe est de générer un gradient en prenant en compte l'image précédente et
 l'image suivante en plus de la prise en compte du spatiale d'un gradient classique, d'où la notion temporel.
@@ -172,14 +152,15 @@ l'image suivante en plus de la prise en compte du spatiale d'un gradient classiq
 Pour la suite de l'explication de la méthode, nous utiliserons les notations suivantes~:
 \begin{itemize}
     \item $I$ : la vidéo, une succession d'image
-    \item $I(x, y, t)$ : le pixel de coordonnée $(x, y)$ de l'image $t$
-    \item $G$ : un gradient
+    \item $I(x, y, t)$ : le pixel de coordonnée $(x, y)$ de l'image $t$ de la vidéo
+    \item $G$ : le gradient
 \end{itemize}
 Soit $ I : \Omega \in \mathbb{R}^{3} \to \mathbb{R}^{3} $,
 soit $ G : \Omega \in \mathbb{R}^{3} \to \mathbb{R}^{2} $.
 
-$G(x, y, t)$ représente le vecteur gradient associé au pixel de coordonnée $(x, y)$ de l'image $t$,
-Ce qui permet de prendre en compte le temps.
+$G(x, y, t)$ représente le vecteur gradient associé au pixel de coordonnée $(x, y)$ de l'image $t$.
+Le fait de faire varier $t$ permet directement de prendre en compte le temps.
+On décompose le gradient dans les deux directions~:
 % Temporel
 
 \[G(x,y,t) = 
@@ -202,14 +183,14 @@ Dans un premier temps, on utilise un calcul simple du gradient~:
         G_{y}(x,y,t_{0}) = I(x, y^{-1}, t_{-1}) - I(x, y^{+1}, t_{+1}) \\
     \end{cases}
 \]
-où on effectue un différence entre le pixel précédent en $x$ ou $y$ entre l'image suivante et l'image
-précédente. On obtiens les contours des objets et des zones de mouvements.
+où on effectue une différence entre le pixel précédent en $x$ ou $y$ entre l'image suivante et l'image
+précédente. On obtient les contours des objets et des zones de mouvements.
 % TODO: images démo ?
 
 Dans un deuxième temps, afin de d'augmenter la robustesse de cet opérateur de gradient,
-notre solution implémente un filtre de sobel adapté à notre utilisation temporel.
-Le filtre de sobel par rapport à la première solution a un rôle de filtre passe bas pour limiter 
-l'influence du bruit de la séquence vidéo sur notre estimation de mouvement~:
+notre solution implémente un filtre de Sobel adapté à notre utilisation temporel.
+Le filtre de Sobel par rapport à la première solution a un rôle de filtre passe bas pour limiter 
+l'influence du bruit contenu dans la séquence vidéo sur notre estimation de mouvement~:
 
 \[
     %\begin{bmatrix}
@@ -244,10 +225,35 @@ On calcul le tenseur de structure associé à notre gradient précédemment obte
 Les vecteurs propres et les valeurs propres de ce tenseur permettent d'obtenir rapidement la direction normale
 au gradient et la norme du gradient. Par extension, la direction du déplacement et sa vitesse.
 
-\lipsum[6] % Dummy text
+Concernant la direction normale au gradient, on peut l'obtiens avec cette relation~:
+\[
+    \Theta^{+} = 
+    \begin{bmatrix}
+        2 \times \T_{1,2} \\
+        \T_{2,2} - \T_{1,1} + \sqrt{\Delta}
+    \end{bmatrix}
+\]
+Où~:
+\[
+    \Delta = (\T_{1,1} - \T_{2,2})^{2} + 4 \T_{1,2}^{2}
+\]
 
-\paragraph{Paragraph} \lipsum[7] % Dummy text
-\paragraph{Paragraph} \lipsum[8] % Dummy text
+Norme du gradient~:
+
+\subsubsection{La simple décimation}
+Ici le but est très naïf, il s'agit simplement de supprimer du flux initial une image sur deux et ainsi passer d'un contenu ayant 120 images par seconde à un contenu n'en possédant que 60.
+
+Ce qui a l'avantage d'être le plus rapide à l'exécution mais en contrepartie il faut payer le fait qu'aucun autre traitement n'est effectué. % TODO: u wot ?
+
+\subsubsection{La pondération simple}
+La pondération simple est le fait de se baser deux images consécutives pour en créer une nouvelle, on s'appuie sur la somme pondérée de deux tableaux multidimensionnels (les canaux étant traités séparément) représentants les deux images en entrée pour ensuite avoir un résultat pondéré à cinquante pour-cent de chaque image.
+
+Ceci a l'avantage de bien représenter la continuité spatiale de deux images proches en plus de diminuer par deux le flux d'images initial.
+
+\subsubsection{La double pondération}
+La double pondération quand à elle se base sur trois images consécutives afin de créer notre nouvelle image, ici on s'appuie sur trois sommes pondérées consécutives entre, respectivement, notre image courante et notre image précédente, notre image courante et notre image suivante et finalement la somme pondérée entre ces deux résultats précédents.
+
+Ceci a l'avantage de mieux représenter la continuité spatiale d'images proches en plus de, elle aussi, diminuer par deux le flux d'images initial.
 
 \subsection{Choix des méthodes utilisées}
 
