@@ -103,7 +103,7 @@ We detect motion in the video through calculating an optical flow and a temporal
 
 \maketitle % Print the title and abstract box
 
-%\tableofcontents % Print the contents section
+\tableofcontents % Print the contents section
 
 \thispagestyle{empty} % Removes page numbering from the first page
 
@@ -238,7 +238,26 @@ Où~:
     \Delta = (\T_{1,1} - \T_{2,2})^{2} + 4 \T_{1,2}^{2}
 \]
 
-Norme du gradient~:
+Et pour obtenir la norme du gradient~:
+\[
+    C = \left(\frac{\lambda_{+} - \lambda_{-}}{\lambda_{+} + \lambda_{-}}\right)
+\]
+Où~:
+\[
+    \lambda_{\pm} = \frac{\T_{1,1} + \T_{2,2} \pm \sqrt{\Delta}}{2}
+\]
+
+La combinaison de la normale au gradient et sa norme intégrée à l'image entière nous donne le champ de
+vecteur composant le un flux optique.
+
+Pour visualiser ce flux optique, nous avons convertit ces données en image {\em Hue,
+Saturation, Lightness (HSL)}~:
+\begin{itemize}
+    \item La direction est traduite en couleur sur le disque du Hue
+    \item La norme est exprimée en luminosité
+\end{itemize}
+
+Un exemple de cette visualisation par image HSL est visible figure \ref{hsl}.
 
 \subsubsection{La simple décimation}
 Ici le but est très naïf, il s'agit simplement de supprimer du flux initial une image sur deux et ainsi passer d'un contenu ayant 120 images par seconde à un contenu n'en possédant que 60.
