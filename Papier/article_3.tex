@@ -24,7 +24,6 @@
 
 \usepackage[frenchb]{babel} % Specify a different language here - english by default
 \usepackage[utf8]{inputenc}
-\usepackage{lipsum} % Required to insert dummy text. To be removed otherwise
 \usepackage{xspace}
 
 %----------------------------------------------------------------------------------------
@@ -103,14 +102,14 @@ We detect motion in the video through calculating an optical flow and a temporal
 
 \maketitle % Print the title and abstract box
 
-%\tableofcontents % Print the contents section
+\tableofcontents % Print the contents section
 
 \thispagestyle{empty} % Removes page numbering from the first page
 
 %----------------------------------------------------------------------------------------
 %	ARTICLE CONTENTS
 %----------------------------------------------------------------------------------------
-
+\newpage
 \section*{Introduction} % The \section*{} command stops section numbering
 \addcontentsline{toc}{section}{Introduction} % Adds this section to the table of contents
 
@@ -138,6 +137,22 @@ La seconde méthode est l'application de flous cinétiques sur les objets qui se
 \section{Méthodes}
 
 \subsection{Les méthodes utilisées}
+
+\subsubsection{La décimation simple}
+Ici le but est très naïf, il s'agit simplement de supprimer du flux initial une image sur deux et ainsi passer d'un contenu ayant 120 images par seconde à un contenu n'en possédant que 60.
+
+Ce qui a l'avantage d'être le plus rapide à l'exécution mais en contrepartie aucun traitement n'est effectué comme du flou de mouvements.
+
+\subsubsection{La pondération simple}
+La pondération simple est le fait de se baser deux images consécutives pour en créer une nouvelle, on s'appuie sur la somme pondérée de deux tableaux multidimensionnels (les canaux étant traités séparément) représentants les deux images en entrée pour ensuite avoir un résultat pondéré à cinquante pour-cent de chaque image.
+
+Ceci a l'avantage de bien représenter la continuité spatiale de deux images proches en plus de diminuer par deux le flux d'images initial.
+
+\subsubsection{La double pondération}
+La double pondération quand à elle se base sur trois images consécutives afin de créer notre nouvelle image, ici on s'appuie sur trois sommes pondérées consécutives entre, respectivement, notre image courante et notre image précédente, notre image courante et notre image suivante et finalement la somme pondérée entre ces deux résultats précédents.
+
+Ceci a l'avantage de mieux représenter la continuité spatiale d'images proches en plus de, elle aussi, diminuer par deux le flux d'images initial.
+
 %\include{gradient tst}
 \subsubsection{Gradient spatio temporel}
 L'une des méthode testée pour générer du flou de mouvement est l'approximation du flot optique à l'aide
@@ -240,84 +255,33 @@ Où~:
 
 Norme du gradient~:
 
-\subsubsection{La simple décimation}
-Ici le but est très naïf, il s'agit simplement de supprimer du flux initial une image sur deux et ainsi passer d'un contenu ayant 120 images par seconde à un contenu n'en possédant que 60.
-
-Ce qui a l'avantage d'être le plus rapide à l'exécution mais en contrepartie il faut payer le fait qu'aucun autre traitement n'est effectué. % TODO: u wot ?
+\subsection{Avantage et contraintes des méthodes}
+\subsubsection{La décimation simple}
+Les avantages substantiels de cette méthode sont : son temps d'exécution et sa simplicité. En effet, elle ne requiert guère plus de temps que l'ouverture du flux vidéo, le parcours d'une image sur deux et la fermeture du dit flux. Ce qui lui permet d'être très rapide mais en contre partie on doit payer le coût de n'effectuer aucun traitement sur les images ce qui peut provoquer une gêne à l'utilisateur lors de la visualisation de la séquence finale.
 
 \subsubsection{La pondération simple}
-La pondération simple est le fait de se baser deux images consécutives pour en créer une nouvelle, on s'appuie sur la somme pondérée de deux tableaux multidimensionnels (les canaux étant traités séparément) représentants les deux images en entrée pour ensuite avoir un résultat pondéré à cinquante pour-cent de chaque image.
+La pondération simple requiert un temps d'exécution plus long mais cela reste modeste pour un traitement sur des vidéos dites \og FullHD \fg{} c'est à dire de résolution 1920x1080 pixels. Elle a pour avantage de pondérer deux images proches temporellement et donc possiblement spatialement en plus de de diminuer elle aussi le nombre d'images en sortie afin de pouvoir conserver une flux dit à 60 images par seconde.
 
-Ceci a l'avantage de bien représenter la continuité spatiale de deux images proches en plus de diminuer par deux le flux d'images initial.
+Cependant cette méthode à faible coût ne prend ne compte que la cohérence temporelle et ne cherche pas à recréer un vrai contenu natif 60 Hertz donc ne recrée pas de flou de mouvements. Le problème de saccades reste donc encore d'actualité.
 
 \subsubsection{La double pondération}
-La double pondération quand à elle se base sur trois images consécutives afin de créer notre nouvelle image, ici on s'appuie sur trois sommes pondérées consécutives entre, respectivement, notre image courante et notre image précédente, notre image courante et notre image suivante et finalement la somme pondérée entre ces deux résultats précédents.
+Cette dernière technique de pondération repose sur un calcul à partir de 3 images consécutives. Elle a l'avantage de mieux prendre en compte le déplacement dans une scène grâce à la connaissance de l'image d'avant et celle d'après et réduit l'effet de saccades.
 
-Ceci a l'avantage de mieux représenter la continuité spatiale d'images proches en plus de, elle aussi, diminuer par deux le flux d'images initial.
+Mais elle ne prend toujours pas en compte la particularité du flou de mouvements des contenus à 60 images par seconde.
 
-\subsection{Choix des méthodes utilisées}
-
-\lipsum[9] % Dummy text
-
-\begin{figure}[ht]\centering
-\includegraphics[width=\linewidth]{results}
-\caption{In-text Picture}
-\label{fig:results}
-\end{figure}
-
-Reference to Figure \ref{fig:results}.
-\subsection{Avantage et contraintes des méthodes}
 \subsection{Pourquoi les méthodes choisies permettent de répondre à la problématique}
 
+\subsubsection{La décimation et les pondérations}
+Ces méthodes dites \og Low Cost \fg{} permettent de répondre à la problématique car elles effectuent une décimation du nombre d'images dans la vidéo, ces traitements sont qualifiés de rapide compte tenu du type de séquences proposées en entrée. Il sera explicité dans la partie discussion que les vidéos obtenus avec ces méthodes donnent de bons résultats sur un public non averti.
 %------------------------------------------------
 
 \section{Résultats et Discussion}
 
-\lipsum[10] % Dummy text
-
 \subsection{Phase d'annonce}
-
-\lipsum[11] % Dummy text
-
-\begin{table}[hbt]
-\caption{Table of Grades}
-\centering
-\begin{tabular}{llr}
-\toprule
-\multicolumn{2}{c}{Name} \\
-\cmidrule(r){1-2}
-First name & Last Name & Grade \\
-\midrule
-John & Doe & $7.5$ \\
-Richard & Miles & $2$ \\
-\bottomrule
-\end{tabular}
-\label{tab:label}
-\end{table}
 
 \subsection{Les clés de lecture}
 
-\lipsum[12] % Dummy text
-
-\begin{description}
-\item[Word] Definition
-\item[Concept] Explanation
-\item[Idea] Text
-\end{description}
-
 \subsubsection{Pas d'analyse}
-
-\lipsum[13] % Dummy text
-
-\begin{itemize}[noitemsep] % [noitemsep] removes whitespace between the items for a compact look
-\item First item in a list
-\item Second item in a list
-\item Third item in a list
-\end{itemize}
-
-\subsection{Subsection}
-
-\lipsum[15-23] % Dummy text
 
 %------------------------------------------------
 
