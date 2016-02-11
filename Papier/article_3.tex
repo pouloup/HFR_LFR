@@ -25,6 +25,7 @@
 \usepackage[frenchb]{babel} % Specify a different language here - english by default
 \usepackage[utf8]{inputenc}
 \usepackage{xspace}
+\usepackage{multirow}
 
 %----------------------------------------------------------------------------------------
 %	COLUMNS
@@ -315,22 +316,32 @@ Ces méthodes dites \og Low Cost \fg{} permettent de répondre à la problémati
 %------------------------------------------------
 
 \section{Résultats et Discussion}
-TODO Tableau
-\subsection{Phase d'annonce}
+Suite aux développement de ces solutions nous avons pu constater que malgré leur qualifications \og Low Cost \fg{}, ces méthodes sont très performantes et donnent d'excellent résultats.
 
-\subsection{Les clés de lecture}
+Pour interpréter ces résultats nous avons demandé à un panel d'utilisateurs de visionner la vidéo originale puis trois vidéos issus de ces méthodes naïves et de les classer selon quelques critères simples en nous donnant une note sur 3.
+\begin{center}
 
-\subsubsection{Pas d'analyse}
+\begin{tabular}{|c||c|c|c|}
+  \hline
+  \multicolumn{4}{|c|}{Résultats} \\
+  \hline
+  Vidéo & Saccades & Fluidité & Netteté\\ \hline
+  Vidéo originale\\ (FullHD 120Hz) & 3 & 3 & 3 \\ \hline
+  Vidéo décimée & 1 & 2 & 3 \\ \hline
+  Vidéo pondérée\\ 50/50 & 2 & 3 & 2 \\ \hline
+  Vidéo pondérée\\ 25/50/25 & 3 & 3 & 1.5 \\ \hline
+\end{tabular}
+
+\end{center}
 
 %------------------------------------------------
 
 \section{Conclusion}
 La problématique initiale de notre projet s'articulait autour des moyens possibles afin de pouvoir passer d'une vidéo de très haute qualité avec une cadence de 120 images par secondes (FullHD/4K 120IPS) à un contenu adapté pour d'anciennes générations de téléviseurs ou d'appareils mobiles ne permettant que d'afficher 60 images par secondes.
-
 Nous devions développer des techniques aussi bien frugales telles qu'une simple décimation ou de la pondération, que plus gourmandes en termes de calculs et de temps d'exécution comme le gradient temporel ou plus rapides grâce à l'implémentation de calculs sur des processeurs de carte graphique.
-\subsection{Présentation/interprétation des résultats et limite}
-TODO
-\subsection{ouverture}
+
+On a pu voir grâce aux tests utilisateurs que malgré leur simplicité certaines des méthodes donnent de bons résultats en considérant le ratio qualité/temps de calcul. En particulier la double pondération, qui donne des résultats rapides et proches d'un contenu à 60 images par seconde natif.
+
 Néanmoins il reste énormément de travail sur ce sujet si l'on veut un jour pouvoir efficacement adapter ce genre de contenu à la volée, les méthodes proposées actuellement à \bcom cherchent juste à émuler un contenu 60Hz à partir d'une source à 120Hz. Elles ne représentent pas réellement une vrai vidéo enregistrée à une cadence d'image de 60Hz. C'est pour cela qu'il reste du travail à faire en terme de développement technique afin de se rapprocher le plus possible d'un contenu natif, légitime et authentique à 60Hz.
 %------------------------------------------------
 \phantomsection
