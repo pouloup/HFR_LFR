@@ -299,16 +299,16 @@ Cette dernière technique de pondération repose sur un calcul à partir de 3 im
 
 Mais elle ne prend toujours pas en compte la particularité du flou de mouvements des contenus à 60 images par seconde.
 
-\subsubsection{Gradient spatio temporel}
+\subsubsection{Gradient spatio-temporel}
 Cette méthode est relativement plus coûteuse que les pondérations. En contre partie, elle s'appuie sur
 l'approximation du flux optique des images pour recréer un flou de mouvement plus réaliste en prenant en
 compte la direction et la vitesse du mouvement.
 
-L'estimation du mouvement est par contre approximative, contrairement à un algorithme de type {\em PatchMatch}.
+L'estimation du mouvement est par contre approximative, contrairement à un algorithme de type {\em Patch Match}.
 Elle peut être mauvaise quand les mouvements sont de trop grande amplitude pour que les informations soit contenues dans 
 le gradient spatio temporel (rappel: le gradient se base uniquement sur le pixel voisin de la frame précédente
-ou suivante). Malgrès ce désavantage, cette technique propose un bon compromis entre les méthode de
-pondération naïves et les méthodes précises mais très coûteuses basées sur {\em PatchMatch}.
+ou suivante). Malgré ce désavantage, cette technique propose un bon compromis entre les méthode de
+pondération naïves et les méthodes précises mais très coûteuses basées sur {\em Patch Match}.
 
 \subsection{Pourquoi les méthodes choisies permettent de répondre à la problématique}
 
@@ -317,7 +317,7 @@ Ces méthodes dites \og Low Cost \fg{} permettent de répondre à la problémati
 %------------------------------------------------
 
 \section{Résultats et Discussion}
-
+TODO Tableau
 \subsection{Phase d'annonce}
 
 \subsection{Les clés de lecture}
@@ -327,17 +327,22 @@ Ces méthodes dites \og Low Cost \fg{} permettent de répondre à la problémati
 %------------------------------------------------
 
 \section{Conclusion}
-\subsection{Rappel de la question/problématique}
-\subsection{Présentation/interprétation des résultats et limite}
-\subsection{ouverture}
+La problématique initiale de notre projet s'articulait autour des moyens possibles afin de pouvoir passer d'une vidéo de très haute qualité avec une cadence de 120 images par secondes (FullHD/4K 120IPS) à un contenu adapté pour d'anciennes générations de téléviseurs ou d'appareils mobiles ne permettant que d'afficher 60 images par secondes.
 
+Nous devions développer des techniques aussi bien frugales telles qu'une simple décimation ou de la pondération, que plus gourmandes en termes de calculs et de temps d'exécution comme le gradient temporel ou plus rapides grâce à l'implémentation de calculs sur des processeurs de carte graphique.
+\subsection{Présentation/interprétation des résultats et limite}
+TODO
+\subsection{ouverture}
+Néanmoins il reste énormément de travail sur ce sujet si l'on veut un jour pouvoir efficacement adapter ce genre de contenu à la volée, les méthodes proposées actuellement à \bcom cherchent juste à émuler un contenu 60Hz à partir d'une source à 120Hz. Elles ne représentent pas réellement une vrai vidéo enregistrée à une cadence d'image de 60Hz. C'est pour cela qu'il reste du travail à faire en terme de développement technique afin de se rapprocher le plus possible d'un contenu natif, légitime et authentique à 60Hz.
 %------------------------------------------------
 \phantomsection
-\section*{Acknowledgments} % The \section*{} command stops section numbering
+\section*{Remerciements} % The \section*{} command stops section numbering
 
-\addcontentsline{toc}{section}{Acknowledgments} % Adds this section to the table of contents
+\addcontentsline{toc}{section}{Remerciements} % Adds this section to the table of contents
 
-So long and thanks for all the fish \cite{Figueredo:2009dg}.
+Nous voudrions remercier M. Jean-Yves AUBIE pour son indéfectible soutien ainsi que pour son temps mis à notre disposition lors des tests effectués à \bcom.\\
+
+M. Olivier LE MEUR pour son aide apportée tout du long du projet, son temps passé avec nous ainsi que sa bonne humeur légendaire.
 
 %----------------------------------------------------------------------------------------
 %	REFERENCE LIST
