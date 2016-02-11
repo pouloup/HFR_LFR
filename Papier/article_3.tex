@@ -162,27 +162,25 @@ Cette solution se veut peu coûteuse en calcul, contrairement à la méthode pro
 dernière\cite{hfr2lfr2015} qui cherche à déterminer précisément le flot optique.
 
 En prenant un flux vidéo, le principe est de générer un gradient en prenant en compte l'image précédente et
-l'image suivante en plus de la prise en compte du spatiale d'un gradient classique, d'où la notion temporel.
+l'image suivante, d'où ma notion temporel, en plus du spatial d'un gradient classique.
 
-Pour la suite de l'explication de la méthode, nous utiliserons les notations suivantes~:
+Nous utiliserons les notations suivantes~:
 \begin{itemize}
-    \item $I$ : la vidéo, une succession d'image
+    \item $I$ : la vidéo, une succession d'image tel que $I : \Omega \in \mathbb{R}^{3} \to \mathbb{R}^{3} $
     \item $I(x, y, t)$ : le pixel de coordonnée $(x, y)$ de l'image $t$ de la vidéo
-    \item $G$ : le gradient
+    \item $G$ : le gradient tel que $ G : \Omega \in \mathbb{R}^{3} \to \mathbb{R}^{2} $.
+
 \end{itemize}
-Soit $ I : \Omega \in \mathbb{R}^{3} \to \mathbb{R}^{3} $,
-soit $ G : \Omega \in \mathbb{R}^{3} \to \mathbb{R}^{2} $.
 
 $G(x, y, t)$ représente le vecteur gradient associé au pixel de coordonnée $(x, y)$ de l'image $t$.
-Le fait de faire varier $t$ permet directement de prendre en compte le temps.
 On décompose le gradient dans les deux directions~:
 % Temporel
 
 \[G(x,y,t) = 
-    \begin{cases}
+    \begin{bmatrix}
         G_{x}(x,y,t) \\
         G_{y}(x,y,t)
-    \end{cases}
+    \end{bmatrix}
 \]
 
 Où $G_{x}$ représente le gradient en $x$ et $G_{y}$ le gradient en $y$, semblable à un gradient classique, 
@@ -194,15 +192,15 @@ l'image actuelle, $t_{-1}$ l'image précédente et $t_{+1}$ l'image suivante.
 Dans un premier temps, on utilise un calcul simple du gradient~:
 \[
     \begin{cases}
-        G_{x}(x,y,t_{0}) = I(x^{-1}, y, t_{-1}) - I(x^{+1}, y, t_{+1}) \\
-        G_{y}(x,y,t_{0}) = I(x, y^{-1}, t_{-1}) - I(x, y^{+1}, t_{+1}) \\
+        G_{x}(x,y,t_{0}) = I(x_{-1}, y, t_{-1}) - I(x_{+1}, y, t_{+1}) \\
+        G_{y}(x,y,t_{0}) = I(x, y_{-1}, t_{-1}) - I(x, y_{+1}, t_{+1}) \\
     \end{cases}
 \]
 où on effectue une différence entre le pixel précédent en $x$ ou $y$ entre l'image suivante et l'image
 précédente. On obtient les contours des objets et des zones de mouvements.
 % TODO: images démo ?
 
-Dans un deuxième temps, afin de d'augmenter la robustesse de cet opérateur de gradient,
+Dans un deuxième temps, afin d'augmenter la robustesse de cet opérateur de gradient,
 notre solution implémente un filtre de Sobel adapté à notre utilisation temporel.
 Le filtre de Sobel par rapport à la première solution a un rôle de filtre passe bas pour limiter 
 l'influence du bruit contenu dans la séquence vidéo sur notre estimation de mouvement~:
@@ -222,9 +220,9 @@ l'influence du bruit contenu dans la séquence vidéo sur notre estimation de mo
         %\end{bmatrix} \\
         G_{y}(x,y,t_{0}) = 
         \begin{bmatrix}
-            I(x^{-1}, y^{-1}, t_{-1}) & 0 & I(x^{-1}, y^{+1}, t_{+1}) \\
-            2 \times I(x,      y^{-1}, t_{-1}) & 0 & 2 \times I(x,      y^{+1}, t_{+1}) \\
-            I(x^{+1}, y^{-1}, t_{-1}) & 0 & I(x^{+1}, y^{+1}, t_{+1}) \\
+            I(x_{-1}, y_{-1}, t_{-1}) & 0 & I(x_{-1}, y_{+1}, t_{+1}) \\
+            2 \times I(x,      y_{-1}, t_{-1}) & 0 & 2 \times I(x,      y_{+1}, t_{+1}) \\
+            I(x_{+1}, y_{-1}, t_{-1}) & 0 & I(x_{+1}, y_{+1}, t_{+1}) \\
         \end{bmatrix}
     \end{cases}
 \]
@@ -238,9 +236,9 @@ On calcul le tenseur de structure associé à notre gradient précédemment obte
     \end{bmatrix}
 \]
 Les vecteurs propres et les valeurs propres de ce tenseur permettent d'obtenir rapidement la direction normale
-au gradient et la norme du gradient. Par extension, la direction du déplacement et sa vitesse.
+au gradient et une information locale sur l'activité spatio-temporelle de la zone. Par extension, la direction du déplacement et sa vitesse.
 
-Concernant la direction normale au gradient, on peut l'obtiens avec cette relation~:
+Concernant la direction normale au gradient, on l'obtiens avec cette relation~:
 \[
     \Theta^{+} = 
     \begin{bmatrix}
@@ -253,7 +251,7 @@ Où~:
     \Delta = (\T_{1,1} - \T_{2,2})^{2} + 4 \T_{1,2}^{2}
 \]
 
-Et pour obtenir la norme du gradient~:
+Et pour obtenir la cohérence norme, qui permet de détecter les gradients forts~:
 \[
     C = \left(\frac{\lambda_{+} - \lambda_{-}}{\lambda_{+} + \lambda_{-}}\right)
 \]
@@ -262,7 +260,7 @@ Où~:
     \lambda_{\pm} = \frac{\T_{1,1} + \T_{2,2} \pm \sqrt{\Delta}}{2}
 \]
 
-La combinaison de la normale au gradient et sa norme intégrée à l'image entière nous donne un champ 
+La combinaison de la normale au gradient et sa cohérence norme sur l'image entière nous donne un champ 
 dense de vecteurs, ou le flux optique.
 
 Pour visualiser ce flux optique, nous avons convertit ces données en image {\em Hue,
@@ -275,7 +273,7 @@ Saturation, Lightness (HSL)}~:
 Un exemple de cette visualisation par image HSL est visible figure \ref{hsl}.
 \begin{figure}[!ht]%htp]
     \centering
-    \includegraphics[width=0.48\textwidth]{img/hsl.png}
+    \includegraphics[width=0.5\textwidth]{img/hsl.png}
     \caption{Mouvements visualisé avec une image HSL}
     \label{hsl}
 \end{figure}
