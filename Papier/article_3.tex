@@ -151,7 +151,7 @@ Ceci a l'avantage de bien représenter la continuité spatiale de deux images pr
 \subsubsection{La double pondération}
 La double pondération quand à elle se base sur trois images consécutives afin de créer notre nouvelle image, ici on s'appuie sur trois sommes pondérées consécutives entre, respectivement, notre image courante et notre image précédente, notre image courante et notre image suivante et finalement la somme pondérée entre ces deux résultats précédents.
 
-Ceci a l'avantage de mieux représenter la continuité spatiale d'images proches en plus de, elle aussi, diminuer par deux le flux d'images initial.
+Ceci a l'avantage de mieux représenter la continuité spatiale d'images proches en plus de, elle aussi, diminuer par deux le flux d'images initial. Mais elle ne prend pas en compte la compensation de mouvements malheureusement.w
 
 %\include{gradient tst}
 \subsubsection{Gradient spatio temporel}
@@ -292,12 +292,12 @@ Les avantages substantiels de cette méthode sont : son temps d'exécution et sa
 \subsubsection{La pondération simple}
 La pondération simple requiert un temps d'exécution plus long mais cela reste modeste pour un traitement sur des vidéos dites \og FullHD \fg{} c'est à dire de résolution 1920x1080 pixels. Elle a pour avantage de pondérer deux images proches temporellement et donc possiblement spatialement en plus de de diminuer elle aussi le nombre d'images en sortie afin de pouvoir conserver une flux dit à 60 images par seconde.
 
-Cependant cette méthode à faible coût ne prend ne compte que la cohérence temporelle et ne cherche pas à recréer un vrai contenu natif 60 Hertz donc ne recrée pas de flou de mouvements. Le problème de saccades reste donc encore d'actualité.
+Cependant cette méthode à faible coût ne prend en compte que la cohérence temporelle et ne cherche pas à recréer un vrai contenu natif 60 Hertz donc ne recrée pas de flou de mouvements. Le problème des saccades reste donc encore présent dans les vidéos de résultats.
 
 \subsubsection{La double pondération}
 Cette dernière technique de pondération repose sur un calcul à partir de 3 images consécutives. Elle a l'avantage de mieux prendre en compte le déplacement dans une scène grâce à la connaissance de l'image d'avant et celle d'après et réduit l'effet de saccades.
 
-Mais elle ne prend toujours pas en compte la particularité du flou de mouvements des contenus à 60 images par seconde.
+Mais elle ne prend toujours pas en compte la particularité du flou de mouvements des contenus à 60 images par seconde ni des vecteurs de déplacement entre deux images consécutives.
 
 \subsubsection{Gradient spatio-temporel}
 Cette méthode est relativement plus coûteuse que les pondérations. En contre partie, elle s'appuie sur
@@ -342,7 +342,7 @@ Néanmoins il reste énormément de travail sur ce sujet si l'on veut un jour po
 
 Nous voudrions remercier M. Jean-Yves AUBIE pour son indéfectible soutien ainsi que pour son temps mis à notre disposition lors des tests effectués à \bcom.\\
 
-M. Olivier LE MEUR pour son aide apportée tout du long du projet, son temps passé avec nous ainsi que sa bonne humeur légendaire.
+M. Olivier LE MEUR pour son aide apportée tout du long du projet et son temps passé avec nous.
 
 %----------------------------------------------------------------------------------------
 %	REFERENCE LIST
