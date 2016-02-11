@@ -262,8 +262,8 @@ Où~:
     \lambda_{\pm} = \frac{\T_{1,1} + \T_{2,2} \pm \sqrt{\Delta}}{2}
 \]
 
-La combinaison de la normale au gradient et sa norme intégrée à l'image entière nous donne le champ de
-vecteur composant le un flux optique.
+La combinaison de la normale au gradient et sa norme intégrée à l'image entière nous donne un champ 
+dense de vecteurs, ou le flux optique.
 
 Pour visualiser ce flux optique, nous avons convertit ces données en image {\em Hue,
 Saturation, Lightness (HSL)}~:
@@ -273,6 +273,17 @@ Saturation, Lightness (HSL)}~:
 \end{itemize}
 
 Un exemple de cette visualisation par image HSL est visible figure \ref{hsl}.
+\begin{figure}[!ht]%htp]
+    \centering
+    \includegraphics[width=0.48\textwidth]{img/hsl.png}
+    \caption{Mouvements visualisé avec une image HSL}
+    \label{hsl}
+\end{figure}
+
+Une fois les mouvements détectés et exprimés pour chaque pixel, nous utilisons ces informations pour recréer
+un flou de mouvement pour augmenter la sensation de fluidité de la vidéo.
+Afin de réaliser cette illusion nous appliquons un flou directionnel sur chaque pixel de l'image en pondérant
+sa valeurs avec ses voisins en fonction de la direction et de la taille de la norme.
 
 \subsection{Avantage et contraintes des méthodes}
 \subsubsection{La décimation simple}
@@ -287,6 +298,17 @@ Cependant cette méthode à faible coût ne prend ne compte que la cohérence te
 Cette dernière technique de pondération repose sur un calcul à partir de 3 images consécutives. Elle a l'avantage de mieux prendre en compte le déplacement dans une scène grâce à la connaissance de l'image d'avant et celle d'après et réduit l'effet de saccades.
 
 Mais elle ne prend toujours pas en compte la particularité du flou de mouvements des contenus à 60 images par seconde.
+
+\subsubsection{Gradient spatio temporel}
+Cette méthode est relativement plus coûteuse que les pondérations. En contre partie, elle s'appuie sur
+l'approximation du flux optique des images pour recréer un flou de mouvement plus réaliste en prenant en
+compte la direction et la vitesse du mouvement.
+
+L'estimation du mouvement est par contre approximative, contrairement à un algorithme de type {\em PatchMatch}.
+Elle peut être mauvaise quand les mouvements sont de trop grande amplitude pour que les informations soit contenues dans 
+le gradient spatio temporel (rappel: le gradient se base uniquement sur le pixel voisin de la frame précédente
+ou suivante). Malgrès ce désavantage, cette technique propose un bon compromis entre les méthode de
+pondération naïves et les méthodes précises mais très coûteuses basées sur {\em PatchMatch}.
 
 \subsection{Pourquoi les méthodes choisies permettent de répondre à la problématique}
 
