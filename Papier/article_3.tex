@@ -26,6 +26,8 @@
 \usepackage[utf8]{inputenc}
 \usepackage{xspace}
 \usepackage{multirow}
+\usepackage{subfig}
+\usepackage{amsmath}
 
 %----------------------------------------------------------------------------------------
 %	COLUMNS
@@ -46,6 +48,8 @@
 %----------------------------------------------------------------------------------------
 \newcommand{\bcom}{b$\textless\textgreater$com\xspace}
 \newcommand{\T}{T(x, y, t_{0})}
+\newcommand{\Gx}{G_{x}(x,y,t_{0})}
+\newcommand{\Gy}{G_{y}(x,y,t_{0})}
 
 %----------------------------------------------------------------------------------------
 %	HYPERLINKS
@@ -110,7 +114,7 @@ We detect motion in the video through calculating an optical flow and a temporal
 %----------------------------------------------------------------------------------------
 %	ARTICLE CONTENTS
 %----------------------------------------------------------------------------------------
-\newpage
+%\newpage
 \section*{Introduction} % The \section*{} command stops section numbering
 \addcontentsline{toc}{section}{Introduction} % Adds this section to the table of contents
 
@@ -160,7 +164,8 @@ L'une des méthode testée pour générer du flou de mouvement est l'approximati
 d'un gradient spatio temporel.
 % TODO: expliquer le flot optique
 Cette solution se veut peu coûteuse en calcul, contrairement à la méthode proposée l'année
-dernière\cite{hfr2lfr2015} qui cherche à déterminer précisément le flot optique.
+dernière\cite{hfr2lfr2015} basé sur une extension polynomiale\cite{farneback2003} qui permet
+de déterminer précisément le flot optique.
 
 En prenant un flux vidéo, le principe est de générer un gradient en prenant en compte l'image précédente et
 l'image suivante, d'où ma notion temporel, en plus du spatial d'un gradient classique.
@@ -213,22 +218,22 @@ l'influence du bruit contenu dans la séquence vidéo sur notre estimation de mo
     %    -1 & 0 & 1 
     %\end{bmatrix}
     \begin{cases}
-        G_{x}(x,y,t_{0}) = \ldots \\
-        %\begin{bmatrix}
-        %    I(x^{-1}, y^{-1}, t_{-1}) & 0 & I(x^{-1}, y^{+1}, t_{+1}) \\
-        %    0 & 0 & 0 \\
-        %    I(x^{+1}, y^{-1}, t_{-1}) & 0 & I(x^{+1}, y^{+1}, t_{+1}) \\
-        %\end{bmatrix} \\
+        G_{x}(x,y,t_{0}) = \\
+        \begin{bmatrix}
+            I(x^{-1}, y^{-1}, t_{-1}) & I(x_{-1}, y, t_{-1}) & I(x^{-1}, y^{+1}, t_{-1}) \\
+            0 & 0 & 0 \\
+            I(x^{+1}, y^{-1}, t_{+1}) & I(x_{+1}, y, t_{+1}) & I(x^{+1}, y^{+1}, t_{+1}) \\
+        \end{bmatrix} \\
         G_{y}(x,y,t_{0}) = 
         \begin{bmatrix}
-            I(x_{-1}, y_{-1}, t_{-1}) & 0 & I(x_{-1}, y_{+1}, t_{+1}) \\
+                     I(x_{-1}, y_{-1}, t_{-1}) & 0 &          I(x_{-1}, y_{+1}, t_{+1}) \\
             2 \times I(x,      y_{-1}, t_{-1}) & 0 & 2 \times I(x,      y_{+1}, t_{+1}) \\
-            I(x_{+1}, y_{-1}, t_{-1}) & 0 & I(x_{+1}, y_{+1}, t_{+1}) \\
+                     I(x_{+1}, y_{-1}, t_{-1}) & 0 &          I(x_{+1}, y_{+1}, t_{+1}) \\
         \end{bmatrix}
     \end{cases}
 \]
 
-On calcul le tenseur de structure associé à notre gradient précédemment obtenus tel que~:
+On calcule le tenseur de structure associé à notre gradient précédemment obtenus tel que~:
 \[
     T(x, y, t_{0}) = 
     \begin{bmatrix}
@@ -239,13 +244,18 @@ On calcul le tenseur de structure associé à notre gradient précédemment obte
 Les vecteurs propres et les valeurs propres de ce tenseur permettent d'obtenir rapidement la direction normale
 au gradient et une information locale sur l'activité spatio-temporelle de la zone. Par extension, la direction du déplacement et sa vitesse.
 
-Concernant la direction normale au gradient, on l'obtiens avec cette relation~:
+Concernant la direction normale au gradient, on l'obtiens avec cette relation\footnote{La notation $\T_{m,n}$
+représente le scalaire contenu dans la matrice $\T$ à la ligne $m$ et la colonne $n$.}~:
 \[
     \Theta^{+} = 
     \begin{bmatrix}
         2 \times \T_{1,2} \\
         \T_{2,2} - \T_{1,1} + \sqrt{\Delta}
     \end{bmatrix}
+    %\begin{bmatrix}
+    %    2 \times \Gx \Gy \\
+    %    \T_{2,2} - \T_{1,1} + \sqrt{\Delta}
+    %\end{bmatrix}
 \]
 Où~:
 \[
@@ -274,7 +284,11 @@ Saturation, Lightness (HSL)}~:
 Un exemple de cette visualisation par image HSL est visible figure \ref{hsl}.
 \begin{figure}[!ht]%htp]
     \centering
-    \includegraphics[width=0.5\textwidth]{img/hsl.png}
+    \subfloat[Image précédente]{\label{hsl:prev}\includegraphics[width=0.5\textwidth]{img/prev.png}}
+    \hspace{0.030\textwidth}
+    \subfloat[Image suivante]{\label{hsl:next}\includegraphics[width=0.5\textwidth]{img/next.png}}
+    \hspace{0.030\textwidth}
+    \subfloat[Image HSL]{\label{hsl:final}\includegraphics[width=0.5\textwidth]{img/final.png}}
     \caption{Mouvements visualisé avec une image HSL}
     \label{hsl}
 \end{figure}
@@ -282,7 +296,24 @@ Un exemple de cette visualisation par image HSL est visible figure \ref{hsl}.
 Une fois les mouvements détectés et exprimés pour chaque pixel, nous utilisons ces informations pour recréer
 un flou de mouvement pour augmenter la sensation de fluidité de la vidéo.
 Afin de réaliser cette illusion nous appliquons un flou directionnel sur chaque pixel de l'image en pondérant
-sa valeurs avec ses voisins en fonction de la direction et de la taille de la norme.
+sa valeurs avec ses voisins en fonction de la direction et de la taille de la norme~:
+
+\[
+%\begin{align}
+	I'_{t} = \frac{1}{\sum^{k}_{i=0}\sum^{L}_{j=0}C_{u}(i,j)}
+\]
+\[
+	\times \sum^{K}_{i=0}\sum^{L}_{j=0} C_{u}(i,j).I_{2n}(x+i-\frac{K}{2}, y+j-\frac{L}{2})
+%\end{align}
+\]
+
+Où~:
+
+\begin{itemize}
+	\item $I$ est notre image en entrée 
+	\item $I'$ est notre image en sortie 
+	\item $C_{u}$ est le filtre de convolution de taille $K \times L$ associé au pixel $u$, centré en $u$
+\end{itemize}
 
 \subsection{Avantage et contraintes des méthodes}
 \subsubsection{La décimation simple}
@@ -305,8 +336,8 @@ compte la direction et la vitesse du mouvement.
 
 L'estimation du mouvement est par contre approximative, contrairement à un algorithme de type {\em Patch Match}.
 Elle peut être mauvaise quand les mouvements sont de trop grande amplitude pour que les informations soit contenues dans 
-le gradient spatio temporel (rappel: le gradient se base uniquement sur le pixel voisin de la frame précédente
-ou suivante). Malgré ce désavantage, cette technique propose un bon compromis entre les méthode de
+le gradient spatio temporel --rappel: le gradient se base uniquement sur le pixel voisin de la frame précédente
+ou suivante--. Malgré ce désavantage, cette technique propose un bon compromis entre les méthode de
 pondération naïves et les méthodes précises mais très coûteuses basées sur {\em Patch Match}.
 
 \subsection{Pourquoi les méthodes choisies permettent de répondre à la problématique}
@@ -315,6 +346,13 @@ pondération naïves et les méthodes précises mais très coûteuses basées su
 Ces méthodes dites \og Low Cost \fg{} permettent de répondre à la problématique car elles effectuent une décimation du nombre d'images dans la vidéo, ces traitements sont qualifiés de rapide compte tenu du type de séquences proposées en entrée. Il sera explicité dans la partie discussion que les vidéos obtenus avec ces méthodes donnent de bons résultats sur un public non averti.
 
 \subsubsection{Le gradient spatio temporel}
+Notre méthode basée sur le gradient spatio temporel permet aussi de décimer le nombre d'images de la vidéo. 
+Ce traitement est plus lourd mais permet de meilleurs résultats visuels que les décimation et les pondérations
+tout en fonctionnant en temps réel sur un processeur récent.
+
+La difficultée reste l'estimation du mouvement dans la séquence,
+une voie d'amélioration possible serait la construction un gradient tri-dimenssionel, 
+tel que proposé dans l'article {\em Very high accuracy velocity estimation using orientation tensors, parametric motion, and simultaneous segmentation of the motion field}\cite{farneback2001}.
 %------------------------------------------------
 
 \section{Résultats et Discussion}
@@ -344,7 +382,10 @@ Nous devions développer des techniques aussi bien frugales telles qu'une simple
 
 On a pu voir grâce aux tests utilisateurs que malgré leur simplicité certaines des méthodes donnent de bons résultats en considérant le ratio qualité/temps de calcul. En particulier la double pondération, qui donne des résultats rapides et proches d'un contenu à 60 images par seconde natif.
 
-Néanmoins il reste énormément de travail sur ce sujet si l'on veut un jour pouvoir efficacement adapter ce genre de contenu à la volée, les méthodes proposées actuellement à \bcom cherchent juste à émuler un contenu 60Hz à partir d'une source à 120Hz. Elles ne représentent pas réellement une vrai vidéo enregistrée à une cadence d'image de 60Hz. C'est pour cela qu'il reste du travail à faire en terme de développement technique afin de se rapprocher le plus possible d'un contenu natif, légitime et authentique à 60Hz.
+Néanmoins il reste énormément de travail sur ce sujet si l'on veut un jour pouvoir efficacement adapter ce genre de contenu à la volée. Les méthodes proposées actuellement à \bcom cherchent à émuler un contenu 60Hz à partir d'une source à 120Hz. Les contenus actuels ne présentent pas les résultats d'une vrai vidéo enregistrée à une cadence d'image de 60Hz. C'est pour cela qu'il reste du travail à faire en terme de développement technique afin de se rapprocher le plus possible d'un contenu natif, légitime et authentique à 60Hz.
+
+Cependant, si l'approximation est autorisée, comme semble le présenter les tests utilisateurs, les méthodes peu coûteuses en temps de calcul sont un bon compromis.
+Le perfectionnement de notre méthode avec un gradient tridimensionnel offrirait ce type de résultats.
 %------------------------------------------------
 \phantomsection
 \section*{Remerciements} % The \section*{} command stops section numbering
