@@ -298,7 +298,7 @@ Cette dernière technique de pondération repose sur un calcul à partir de 3 im
 
 Mais elle ne prend toujours pas en compte la particularité du flou de mouvements des contenus à 60 images par seconde ni des vecteurs de déplacement entre deux images consécutives.
 
-\subsubsection{Gradient spatio-temporel}
+\subsubsection{Gradient spatio temporel}
 Cette méthode est relativement plus coûteuse que les pondérations. En contre partie, elle s'appuie sur
 l'approximation du flux optique des images pour recréer un flou de mouvement plus réaliste en prenant en
 compte la direction et la vitesse du mouvement.
@@ -313,23 +313,25 @@ pondération naïves et les méthodes précises mais très coûteuses basées su
 
 \subsubsection{La décimation et les pondérations}
 Ces méthodes dites \og Low Cost \fg{} permettent de répondre à la problématique car elles effectuent une décimation du nombre d'images dans la vidéo, ces traitements sont qualifiés de rapide compte tenu du type de séquences proposées en entrée. Il sera explicité dans la partie discussion que les vidéos obtenus avec ces méthodes donnent de bons résultats sur un public non averti.
+
+\subsubsection{Le gradient spatio temporel}
 %------------------------------------------------
 
 \section{Résultats et Discussion}
 Suite aux développement de ces solutions nous avons pu constater que malgré leur qualifications \og Low Cost \fg{}, ces méthodes sont très performantes et donnent d'excellent résultats.
 
-Pour interpréter ces résultats nous avons demandé à un panel d'utilisateurs de visionner la vidéo originale puis trois vidéos issus de ces méthodes naïves et de les classer selon quelques critères simples en nous donnant une note sur 3.
+Pour interpréter ces résultats nous avons demandé à un panel d'utilisateurs de visionner la vidéo originale puis trois vidéos issus de ces méthodes naïves et de les classer selon quelques critères simples en nous donnant une note sur 4 (très mauvais, mauvais, bon et très bon).
 \begin{center}
 
-\begin{tabular}{|c||c|c|c|}
+\begin{tabular}{|p{3cm}||c|c|c|}
   \hline
   \multicolumn{4}{|c|}{Résultats} \\
   \hline
   Vidéo & Saccades & Fluidité & Netteté\\ \hline
-  Vidéo originale\\ (FullHD 120Hz) & 3 & 3 & 3 \\ \hline
-  Vidéo décimée & 1 & 2 & 3 \\ \hline
-  Vidéo pondérée\\ 50/50 & 2 & 3 & 2 \\ \hline
-  Vidéo pondérée\\ 25/50/25 & 3 & 3 & 1.5 \\ \hline
+  Vidéo originale (FullHD 120Hz) & 4 & 4 & 4 \\ \hline
+  Vidéo décimée & 1 & 2 & 4 \\ \hline
+  Vidéo pondérée 50/50 & 2 & 4 & 2 \\ \hline
+  Vidéo pondérée 25/50/25 & 4 & 4 & 2 \\ \hline
 \end{tabular}
 
 \end{center}
