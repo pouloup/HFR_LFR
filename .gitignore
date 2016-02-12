@@ -45,4 +45,6 @@
 *.toc
 *.log
 *.out
+*.synctex.gz
 
+*.opendb
