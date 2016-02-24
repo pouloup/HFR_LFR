@@ -244,7 +244,7 @@ On calcule le tenseur de structure associé à notre gradient précédemment obt
 Les vecteurs propres et les valeurs propres de ce tenseur permettent d'obtenir rapidement la direction normale
 au gradient et une information locale sur l'activité spatio-temporelle de la zone. Par extension, la direction du déplacement et sa vitesse.
 
-Concernant la direction normale au gradient, on l'obtiens avec cette relation\footnote{La notation $\T_{m,n}$
+Concernant la direction normale au gradient, on l'obtient avec cette relation\footnote{La notation $\T_{m,n}$
 représente le scalaire contenu dans la matrice $\T$ à la ligne $m$ et la colonne $n$.}~:
 \[
     \Theta^{+} = 
@@ -296,7 +296,7 @@ Un exemple de cette visualisation par image HSL est visible figure \ref{hsl}.
 Une fois les mouvements détectés et exprimés pour chaque pixel, nous utilisons ces informations pour recréer
 un flou de mouvement pour augmenter la sensation de fluidité de la vidéo.
 Afin de réaliser cette illusion nous appliquons un flou directionnel sur chaque pixel de l'image en pondérant
-sa valeurs avec ses voisins en fonction de la direction et de la taille de la norme~:
+sa valeur avec ses voisins en fonction de la direction et de la taille de la norme~:
 
 \[
 %\begin{align}
@@ -350,7 +350,7 @@ Notre méthode basée sur le gradient spatio temporel permet aussi de décimer l
 Ce traitement est plus lourd mais permet de meilleurs résultats visuels que les décimation et les pondérations
 tout en fonctionnant en temps réel sur un processeur récent.
 
-La difficultée reste l'estimation du mouvement dans la séquence,
+La difficulté reste l'estimation du mouvement dans la séquence,
 une voie d'amélioration possible serait la construction un gradient tri-dimenssionel, 
 tel que proposé dans l'article {\em Very high accuracy velocity estimation using orientation tensors, parametric motion, and simultaneous segmentation of the motion field}\cite{farneback2001}.
 %------------------------------------------------
