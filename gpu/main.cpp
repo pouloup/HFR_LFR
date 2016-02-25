@@ -38,7 +38,8 @@ int main( int argc, char* argv[] )
 	 //global variables  
 	 Mat GetImg;  
 	 Mat prvs, next; //current frame  
-     GpuMat gpu_prvs, gpu_next;
+	 GpuMat gpu_prvs, gpu_next;
+	  GpuMat flow;
 	   
 	 char fileName[100] = "../../src/trans_x265_yuv420_crf0_1080p_120fps.mp4"; //video\\mm2.avi"; //mm2.avi"; //cctv 2.mov"; //mm2.avi"; //";//_p1.avi";  
 	 VideoCapture stream1(fileName);   //0 is the id of video device.0 if you have only one camera     
@@ -65,16 +66,16 @@ int main( int argc, char* argv[] )
 	   break;  
 	  //Resize  
 	  resize(GetImg, next, Size(GetImg.size().width/s, GetImg.size().height/s) );  
-	  cvtColor(next, next, CV_BGR2GRAY);  
+	  //cvtColor(next, next, CV_BGR2GRAY);  
 	  ///////////////////////////////////////////////////////////////////  
-	  GpuMat flow;  
+	   
       gpu_next.upload(next);
 	  //calcOpticalFlowFarneback(gpu_prvs, gpu_next, flow, 0.5, 3, 15, 3, 5, 1.2, 0);  
       of->calc(gpu_prvs, gpu_next, flow);
 	  
       gpu_prvs.download(prvs);
-	  Mat cflow;  
-	  cvtColor(prvs, cflow, CV_GRAY2BGR);  
+	  //Mat cflow;  
+	  //cvtColor(prvs, cflow, CV_GRAY2BGR);  
 	  //drawOptFlowMap(flow, cflow, 10, CV_RGB(0, 255, 0));  
 	  //imshow("OpticalFlowFarneback", cflow);  
 	  
@@ -86,7 +87,6 @@ int main( int argc, char* argv[] )
 	  if (waitKey(5) >= 0)     
 	   break;  
 	  
-	  prvs = next.clone();  
       gpu_prvs = gpu_next.clone();
 	 }  
 
